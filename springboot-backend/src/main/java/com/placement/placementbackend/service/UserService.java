@@ -1,12 +1,12 @@
 package com.placement.placementbackend.service;
 
 import com.placement.placementbackend.entity.User;
+import com.placement.placementbackend.exception.ResourceNotFoundException;
 import com.placement.placementbackend.repository.UserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
-import java.util.Optional;
 
 @Service
 public class UserService {
@@ -16,50 +16,58 @@ public class UserService {
 
     // ================= GET ALL USERS =================
     public List<User> getAllUsers() {
+
         return userRepository.findAll();
     }
 
     // ================= GET USER BY ID =================
-    public Optional<User> getUserById(Long id) {
-        return userRepository.findById(id);
+    public User getUserById(Long id) {
+
+        return userRepository.findById(id)
+                .orElseThrow(() ->
+                        new ResourceNotFoundException("User Not Found"));
     }
 
     // ================= UPDATE USER =================
     public User updateUser(Long id, User updatedUser) {
 
-        User existingUser = userRepository.findById(id).orElse(null);
+        User existingUser = userRepository.findById(id)
+                .orElseThrow(() ->
+                        new ResourceNotFoundException("User Not Found"));
 
-        if (existingUser != null) {
+        existingUser.setName(updatedUser.getName());
+        existingUser.setEmail(updatedUser.getEmail());
+        existingUser.setPassword(updatedUser.getPassword());
+        existingUser.setRole(updatedUser.getRole());
 
-            existingUser.setName(updatedUser.getName());
-            existingUser.setEmail(updatedUser.getEmail());
-            existingUser.setPassword(updatedUser.getPassword());
-            existingUser.setRole(updatedUser.getRole());
+        // ================= STUDENT FIELDS =================
+        existingUser.setCgpa(updatedUser.getCgpa());
+        existingUser.setBranch(updatedUser.getBranch());
+        existingUser.setBacklogs(updatedUser.getBacklogs());
+        existingUser.setSkills(updatedUser.getSkills());
 
-            // Student-specific fields
-            existingUser.setCgpa(updatedUser.getCgpa());
-            existingUser.setBranch(updatedUser.getBranch());
-            existingUser.setBacklogs(updatedUser.getBacklogs());
-            existingUser.setSkills(updatedUser.getSkills());
-
-            return userRepository.save(existingUser);
-        }
-
-        return null;
+        return userRepository.save(existingUser);
     }
 
     // ================= DELETE USER =================
     public void deleteUser(Long id) {
-        userRepository.deleteById(id);
+
+        User existingUser = userRepository.findById(id)
+                .orElseThrow(() ->
+                        new ResourceNotFoundException("User Not Found"));
+
+        userRepository.delete(existingUser);
     }
 
     // ================= GET ALL STUDENTS =================
     public List<User> getAllStudents() {
+
         return userRepository.findByRole("STUDENT");
     }
 
     // ================= GET ALL ADMINS =================
     public List<User> getAllAdmins() {
+
         return userRepository.findByRole("ADMIN");
     }
 }

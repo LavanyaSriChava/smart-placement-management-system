@@ -1,13 +1,13 @@
 package com.placement.placementbackend.service;
 
 import com.placement.placementbackend.entity.Resume;
+import com.placement.placementbackend.exception.ResourceNotFoundException;
 import com.placement.placementbackend.repository.ResumeRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDateTime;
 import java.util.List;
-import java.util.Optional;
 
 @Service
 public class ResumeService {
@@ -30,14 +30,21 @@ public class ResumeService {
     }
 
     // ================= GET RESUME BY STUDENT ID =================
-    public Optional<Resume> getResumeByStudentId(Long studentId) {
+    public Resume getResumeByStudentId(Long studentId) {
 
-        return resumeRepository.findByStudentId(studentId);
+        return resumeRepository.findByStudentId(studentId)
+                .orElseThrow(() ->
+                        new ResourceNotFoundException("Resume Not Found"));
     }
 
     // ================= DELETE RESUME =================
     public void deleteResume(Long id) {
 
-        resumeRepository.deleteById(id);
+        Resume resume = resumeRepository.findById(id)
+                .orElseThrow(() ->
+                        new ResourceNotFoundException("Resume Not Found"));
+
+        resumeRepository.delete(resume);
     }
 }
+

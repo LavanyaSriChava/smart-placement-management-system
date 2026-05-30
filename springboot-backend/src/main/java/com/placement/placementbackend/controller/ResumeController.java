@@ -30,9 +30,10 @@ public class ResumeController {
         return resumeService.getAllResumes();
     }
 
+
     // ================= GET RESUME BY STUDENT ID =================
     @GetMapping("/student/{studentId}")
-    public Optional<Resume> getResumeByStudentId(
+    public Resume getResumeByStudentId(
             @PathVariable Long studentId) {
 
         return resumeService.getResumeByStudentId(studentId);

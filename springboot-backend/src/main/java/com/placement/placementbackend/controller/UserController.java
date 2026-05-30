@@ -22,11 +22,14 @@ public class UserController {
         return userService.getAllUsers();
     }
 
-    // ================= GET USER BY ID =================
+
+// ================= GET USER BY ID =================
     @GetMapping("/{id}")
-    public Optional<User> getUserById(@PathVariable Long id) {
+    public User getUserById(@PathVariable Long id) {
+
         return userService.getUserById(id);
     }
+
 
     // ================= UPDATE USER =================
     @PutMapping("/update/{id}")

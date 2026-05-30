@@ -1,13 +1,13 @@
 package com.placement.placementbackend.service;
 
 import com.placement.placementbackend.entity.Application;
+import com.placement.placementbackend.exception.ResourceNotFoundException;
 import com.placement.placementbackend.repository.ApplicationRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDateTime;
 import java.util.List;
-import java.util.Optional;
 
 @Service
 public class ApplicationService {
@@ -27,6 +27,7 @@ public class ApplicationService {
 
     // ================= GET ALL APPLICATIONS =================
     public List<Application> getAllApplications() {
+
         return applicationRepository.findAll();
     }
 
@@ -42,22 +43,34 @@ public class ApplicationService {
         return applicationRepository.findByCompanyId(companyId);
     }
 
+    // ================= GET APPLICATION BY ID =================
+    public Application getApplicationById(Long id) {
+
+        return applicationRepository.findById(id)
+                .orElseThrow(() ->
+                        new ResourceNotFoundException("Application Not Found"));
+    }
+
     // ================= UPDATE APPLICATION STATUS =================
     public Application updateApplicationStatus(Long id,
                                                Application updatedApplication) {
 
-        Optional<Application> existingApplication =
-                applicationRepository.findById(id);
+        Application application = applicationRepository.findById(id)
+                .orElseThrow(() ->
+                        new ResourceNotFoundException("Application Not Found"));
 
-        if (existingApplication.isPresent()) {
+        application.setStatus(updatedApplication.getStatus());
 
-            Application application = existingApplication.get();
+        return applicationRepository.save(application);
+    }
 
-            application.setStatus(updatedApplication.getStatus());
+    // ================= DELETE APPLICATION =================
+    public void deleteApplication(Long id) {
 
-            return applicationRepository.save(application);
-        }
+        Application application = applicationRepository.findById(id)
+                .orElseThrow(() ->
+                        new ResourceNotFoundException("Application Not Found"));
 
-        return null;
+        applicationRepository.delete(application);
     }
 }
