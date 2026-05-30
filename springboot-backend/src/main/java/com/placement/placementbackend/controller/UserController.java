@@ -1,12 +1,13 @@
 package com.placement.placementbackend.controller;
 
-import com.placement.placementbackend.entity.User;
+import com.placement.placementbackend.dto.UserRequestDTO;
+import com.placement.placementbackend.dto.UserResponseDTO;
 import com.placement.placementbackend.service.UserService;
+import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
-import java.util.Optional;
 
 @RestController
 @RequestMapping("/api/users")
@@ -18,23 +19,23 @@ public class UserController {
 
     // ================= GET ALL USERS =================
     @GetMapping
-    public List<User> getAllUsers() {
+    public List<UserResponseDTO> getAllUsers() {
+
         return userService.getAllUsers();
     }
 
-
-// ================= GET USER BY ID =================
+    // ================= GET USER BY ID =================
     @GetMapping("/{id}")
-    public User getUserById(@PathVariable Long id) {
+    public UserResponseDTO getUserById(@PathVariable Long id) {
 
         return userService.getUserById(id);
     }
 
-
     // ================= UPDATE USER =================
     @PutMapping("/update/{id}")
-    public User updateUser(@PathVariable Long id,
-                           @RequestBody User updatedUser) {
+    public UserResponseDTO updateUser(
+            @PathVariable Long id,
+            @Valid @RequestBody UserRequestDTO updatedUser) {
 
         return userService.updateUser(id, updatedUser);
     }
@@ -50,16 +51,15 @@ public class UserController {
 
     // ================= GET ALL STUDENTS =================
     @GetMapping("/students")
-    public List<User> getAllStudents() {
+    public List<UserResponseDTO> getAllStudents() {
 
         return userService.getAllStudents();
     }
 
     // ================= GET ALL ADMINS =================
     @GetMapping("/admins")
-    public List<User> getAllAdmins() {
+    public List<UserResponseDTO> getAllAdmins() {
 
         return userService.getAllAdmins();
     }
-
 }

@@ -2,6 +2,7 @@ package com.placement.placementbackend.controller;
 
 import com.placement.placementbackend.entity.Application;
 import com.placement.placementbackend.service.ApplicationService;
+import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
@@ -17,7 +18,8 @@ public class ApplicationController {
 
     // ================= APPLY COMPANY =================
     @PostMapping("/apply")
-    public Application applyCompany(@RequestBody Application application) {
+    public Application applyCompany(
+            @Valid @RequestBody Application application) {
 
         return applicationService.applyCompany(application);
     }
@@ -49,7 +51,7 @@ public class ApplicationController {
     @PutMapping("/status/{id}")
     public Application updateApplicationStatus(
             @PathVariable Long id,
-            @RequestBody Application updatedApplication) {
+            @Valid @RequestBody Application updatedApplication) {
 
         return applicationService
                 .updateApplicationStatus(id, updatedApplication);

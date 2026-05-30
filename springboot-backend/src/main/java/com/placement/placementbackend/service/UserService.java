@@ -1,5 +1,7 @@
 package com.placement.placementbackend.service;
 
+import com.placement.placementbackend.dto.UserRequestDTO;
+import com.placement.placementbackend.dto.UserResponseDTO;
 import com.placement.placementbackend.entity.User;
 import com.placement.placementbackend.exception.ResourceNotFoundException;
 import com.placement.placementbackend.repository.UserRepository;
@@ -14,22 +16,45 @@ public class UserService {
     @Autowired
     private UserRepository userRepository;
 
-    // ================= GET ALL USERS =================
-    public List<User> getAllUsers() {
+    // ================= CONVERT ENTITY TO RESPONSE DTO =================
+    private UserResponseDTO convertToResponseDTO(User user) {
 
-        return userRepository.findAll();
+        UserResponseDTO dto = new UserResponseDTO();
+
+        dto.setId(user.getId());
+        dto.setName(user.getName());
+        dto.setEmail(user.getEmail());
+        dto.setRole(user.getRole());
+        dto.setCgpa(user.getCgpa());
+        dto.setBranch(user.getBranch());
+        dto.setBacklogs(user.getBacklogs());
+        dto.setSkills(user.getSkills());
+
+        return dto;
+    }
+
+    // ================= GET ALL USERS =================
+    public List<UserResponseDTO> getAllUsers() {
+
+        return userRepository.findAll()
+                .stream()
+                .map(this::convertToResponseDTO)
+                .toList();
     }
 
     // ================= GET USER BY ID =================
-    public User getUserById(Long id) {
+    public UserResponseDTO getUserById(Long id) {
 
-        return userRepository.findById(id)
+        User user = userRepository.findById(id)
                 .orElseThrow(() ->
                         new ResourceNotFoundException("User Not Found"));
+
+        return convertToResponseDTO(user);
     }
 
     // ================= UPDATE USER =================
-    public User updateUser(Long id, User updatedUser) {
+    public UserResponseDTO updateUser(Long id,
+                                      UserRequestDTO updatedUser) {
 
         User existingUser = userRepository.findById(id)
                 .orElseThrow(() ->
@@ -46,7 +71,9 @@ public class UserService {
         existingUser.setBacklogs(updatedUser.getBacklogs());
         existingUser.setSkills(updatedUser.getSkills());
 
-        return userRepository.save(existingUser);
+        User savedUser = userRepository.save(existingUser);
+
+        return convertToResponseDTO(savedUser);
     }
 
     // ================= DELETE USER =================
@@ -60,14 +87,20 @@ public class UserService {
     }
 
     // ================= GET ALL STUDENTS =================
-    public List<User> getAllStudents() {
+    public List<UserResponseDTO> getAllStudents() {
 
-        return userRepository.findByRole("STUDENT");
+        return userRepository.findByRole("STUDENT")
+                .stream()
+                .map(this::convertToResponseDTO)
+                .toList();
     }
 
     // ================= GET ALL ADMINS =================
-    public List<User> getAllAdmins() {
+    public List<UserResponseDTO> getAllAdmins() {
 
-        return userRepository.findByRole("ADMIN");
+        return userRepository.findByRole("ADMIN")
+                .stream()
+                .map(this::convertToResponseDTO)
+                .toList();
     }
 }

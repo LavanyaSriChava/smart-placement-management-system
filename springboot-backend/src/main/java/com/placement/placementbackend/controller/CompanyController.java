@@ -2,11 +2,11 @@ package com.placement.placementbackend.controller;
 
 import com.placement.placementbackend.entity.Company;
 import com.placement.placementbackend.service.CompanyService;
+import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
-import java.util.Optional;
 
 @RestController
 @RequestMapping("/api/companies")
@@ -18,13 +18,15 @@ public class CompanyController {
 
     // ================= ADD COMPANY =================
     @PostMapping
-    public Company addCompany(@RequestBody Company company) {
+    public Company addCompany(@Valid @RequestBody Company company) {
+
         return companyService.addCompany(company);
     }
 
     // ================= GET ALL COMPANIES =================
     @GetMapping
     public List<Company> getAllCompanies() {
+
         return companyService.getAllCompanies();
     }
 
@@ -38,7 +40,7 @@ public class CompanyController {
     // ================= UPDATE COMPANY =================
     @PutMapping("/update/{id}")
     public Company updateCompany(@PathVariable Long id,
-                                 @RequestBody Company updatedCompany) {
+                                 @Valid @RequestBody Company updatedCompany) {
 
         return companyService.updateCompany(id, updatedCompany);
     }

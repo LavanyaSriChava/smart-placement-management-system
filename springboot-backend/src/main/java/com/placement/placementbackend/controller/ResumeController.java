@@ -2,11 +2,11 @@ package com.placement.placementbackend.controller;
 
 import com.placement.placementbackend.entity.Resume;
 import com.placement.placementbackend.service.ResumeService;
+import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
-import java.util.Optional;
 
 @RestController
 @RequestMapping("/api/resumes")
@@ -18,7 +18,7 @@ public class ResumeController {
 
     // ================= ADD RESUME =================
     @PostMapping
-    public Resume addResume(@RequestBody Resume resume) {
+    public Resume addResume(@Valid @RequestBody Resume resume) {
 
         return resumeService.addResume(resume);
     }
@@ -29,7 +29,6 @@ public class ResumeController {
 
         return resumeService.getAllResumes();
     }
-
 
     // ================= GET RESUME BY STUDENT ID =================
     @GetMapping("/student/{studentId}")
