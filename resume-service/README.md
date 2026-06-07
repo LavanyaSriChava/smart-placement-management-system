@@ -64,10 +64,9 @@ Analysis Results
 ### NLP & Machine Learning
 
 * NLTK
-* KeyBERT
 * Sentence Transformers
-* Scikit-learn
-
+* Text PreProcessing
+  
 ### Generative AI
 
 * Groq API
