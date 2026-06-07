@@ -15,12 +15,12 @@ The system combines NLP techniques for resume-job matching with Generative AI to
 * Upload PDF or DOCX resumes
 * Extract resume text automatically
 
-### 🎯 ATS Matching Score
+### 🎯  Matching Score
 
 * Compare resume content with a job description
 * Generate a matching score based on skill and keyword alignment
 
-### 🚀 ATS Boosters
+### 🚀 Skill Boosters
 
 * Identify technical skills present in the job description but missing from the resume
 * Highlight areas that can improve ATS compatibility
