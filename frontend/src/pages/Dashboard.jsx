@@ -1,34 +1,35 @@
 import StatCard from "../components/cards/StatCard";
+import useDashboardStats from "../hooks/useDashboardStats";
 
 export default function Dashboard() {
+  const stats = useDashboardStats();
+
   return (
     <div>
-      <h2 className="text-3xl font-bold mb-6">
+      <h1 className="text-3xl font-bold mb-6">
         Dashboard
-      </h2>
+      </h1>
 
-      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
-
+      <div className="grid grid-cols-4 gap-6">
         <StatCard
           title="Students"
-          value="1200"
+          value={stats.students}
         />
 
         <StatCard
           title="Companies"
-          value="85"
+          value="0"
         />
 
         <StatCard
           title="Applications"
-          value="3400"
+          value="0"
         />
 
         <StatCard
           title="Placed"
-          value="760"
+          value="0"
         />
-
       </div>
     </div>
   );
