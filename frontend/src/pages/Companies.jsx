@@ -2,6 +2,7 @@ import { useEffect, useState } from "react";
 import CompanyTable from "../components/tables/CompanyTable";
 import {
   getCompanies,
+  addCompany,
   deleteCompany,
   updateCompany,
 } from "../api/companyApi";
@@ -10,7 +11,23 @@ export default function Companies() {
   const [companies, setCompanies] = useState([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState("");
-  const [editingCompany, setEditingCompany] = useState(null);
+
+  const [editingCompany, setEditingCompany] =
+    useState(null);
+
+  const [showAddModal, setShowAddModal] =
+    useState(false);
+
+  const [newCompany, setNewCompany] =
+    useState({
+      companyName: "",
+      role: "",
+      ctc: 0,
+      requiredCgpa: 0,
+      allowedBacklogs: 0,
+      eligibleBranches: "",
+      requiredSkills: "",
+    });
 
   useEffect(() => {
     getCompanies()
@@ -30,7 +47,9 @@ export default function Companies() {
       await deleteCompany(id);
 
       setCompanies((prev) =>
-        prev.filter((company) => company.id !== id)
+        prev.filter(
+          (company) => company.id !== id
+        )
       );
     } catch (error) {
       console.error(error);
@@ -64,6 +83,34 @@ export default function Companies() {
     }
   };
 
+  const handleAddCompany = async () => {
+    try {
+      const created = await addCompany(
+        newCompany
+      );
+
+      setCompanies((prev) => [
+        ...prev,
+        created,
+      ]);
+
+      setNewCompany({
+        companyName: "",
+        role: "",
+        ctc: 0,
+        requiredCgpa: 0,
+        allowedBacklogs: 0,
+        eligibleBranches: "",
+        requiredSkills: "",
+      });
+
+      setShowAddModal(false);
+    } catch (error) {
+      console.error(error);
+      alert("Failed to add company");
+    }
+  };
+
   if (loading) {
     return (
       <div className="bg-white p-6 rounded-xl shadow">
@@ -82,6 +129,124 @@ export default function Companies() {
 
   return (
     <>
+      {/* Add Company Modal */}
+      {showAddModal && (
+        <div className="fixed inset-0 bg-black/50 flex items-center justify-center z-50">
+          <div className="bg-white p-6 rounded-xl w-full max-w-md">
+            <h2 className="text-xl font-bold mb-4">
+              Add Company
+            </h2>
+
+            <input
+              className="border p-2 w-full mb-3 rounded"
+              placeholder="Company Name"
+              value={newCompany.companyName}
+              onChange={(e) =>
+                setNewCompany({
+                  ...newCompany,
+                  companyName: e.target.value,
+                })
+              }
+            />
+
+            <input
+              className="border p-2 w-full mb-3 rounded"
+              placeholder="Role"
+              value={newCompany.role}
+              onChange={(e) =>
+                setNewCompany({
+                  ...newCompany,
+                  role: e.target.value,
+                })
+              }
+            />
+
+            <input
+              type="number"
+              className="border p-2 w-full mb-3 rounded"
+              placeholder="CTC"
+              onChange={(e) =>
+                setNewCompany({
+                  ...newCompany,
+                  ctc: Number(e.target.value),
+                })
+              }
+            />
+
+            <input
+              type="number"
+              className="border p-2 w-full mb-3 rounded"
+              placeholder="Required CGPA"
+              onChange={(e) =>
+                setNewCompany({
+                  ...newCompany,
+                  requiredCgpa: Number(
+                    e.target.value
+                  ),
+                })
+              }
+            />
+
+            <input
+              type="number"
+              className="border p-2 w-full mb-3 rounded"
+              placeholder="Allowed Backlogs"
+              onChange={(e) =>
+                setNewCompany({
+                  ...newCompany,
+                  allowedBacklogs: Number(
+                    e.target.value
+                  ),
+                })
+              }
+            />
+
+            <input
+              className="border p-2 w-full mb-3 rounded"
+              placeholder="Eligible Branches"
+              onChange={(e) =>
+                setNewCompany({
+                  ...newCompany,
+                  eligibleBranches:
+                    e.target.value,
+                })
+              }
+            />
+
+            <input
+              className="border p-2 w-full mb-4 rounded"
+              placeholder="Required Skills"
+              onChange={(e) =>
+                setNewCompany({
+                  ...newCompany,
+                  requiredSkills:
+                    e.target.value,
+                })
+              }
+            />
+
+            <div className="flex justify-end gap-2">
+              <button
+                onClick={() =>
+                  setShowAddModal(false)
+                }
+                className="bg-gray-500 text-white px-4 py-2 rounded"
+              >
+                Cancel
+              </button>
+
+              <button
+                onClick={handleAddCompany}
+                className="bg-green-500 text-white px-4 py-2 rounded"
+              >
+                Add
+              </button>
+            </div>
+          </div>
+        </div>
+      )}
+
+      {/* Edit Company Modal */}
       {editingCompany && (
         <div className="fixed inset-0 bg-black/50 flex items-center justify-center z-50">
           <div className="bg-white p-6 rounded-xl w-full max-w-md">
@@ -90,23 +255,24 @@ export default function Companies() {
             </h2>
 
             <input
-              type="text"
-              placeholder="Company Name"
               className="border p-2 w-full mb-3 rounded"
-              value={editingCompany.companyName || ""}
+              value={
+                editingCompany.companyName || ""
+              }
               onChange={(e) =>
                 setEditingCompany({
                   ...editingCompany,
-                  companyName: e.target.value,
+                  companyName:
+                    e.target.value,
                 })
               }
             />
 
             <input
-              type="text"
-              placeholder="Role"
               className="border p-2 w-full mb-3 rounded"
-              value={editingCompany.role || ""}
+              value={
+                editingCompany.role || ""
+              }
               onChange={(e) =>
                 setEditingCompany({
                   ...editingCompany,
@@ -117,39 +283,14 @@ export default function Companies() {
 
             <input
               type="number"
-              placeholder="CTC"
               className="border p-2 w-full mb-3 rounded"
-              value={editingCompany.ctc || ""}
-              onChange={(e) =>
-                setEditingCompany({
-                  ...editingCompany,
-                  ctc: Number(e.target.value),
-                })
+              value={
+                editingCompany.ctc || ""
               }
-            />
-
-            <input
-              type="number"
-              placeholder="Required CGPA"
-              className="border p-2 w-full mb-3 rounded"
-              value={editingCompany.requiredCgpa || ""}
               onChange={(e) =>
                 setEditingCompany({
                   ...editingCompany,
-                  requiredCgpa: Number(e.target.value),
-                })
-              }
-            />
-
-            <input
-              type="number"
-              placeholder="Allowed Backlogs"
-              className="border p-2 w-full mb-3 rounded"
-              value={editingCompany.allowedBacklogs || ""}
-              onChange={(e) =>
-                setEditingCompany({
-                  ...editingCompany,
-                  allowedBacklogs: Number(
+                  ctc: Number(
                     e.target.value
                   ),
                 })
@@ -157,27 +298,18 @@ export default function Companies() {
             />
 
             <input
-              type="text"
-              placeholder="Eligible Branches"
-              className="border p-2 w-full mb-3 rounded"
-              value={editingCompany.eligibleBranches || ""}
-              onChange={(e) =>
-                setEditingCompany({
-                  ...editingCompany,
-                  eligibleBranches: e.target.value,
-                })
-              }
-            />
-
-            <input
-              type="text"
-              placeholder="Required Skills"
+              type="number"
               className="border p-2 w-full mb-4 rounded"
-              value={editingCompany.requiredSkills || ""}
+              value={
+                editingCompany.requiredCgpa ||
+                ""
+              }
               onChange={(e) =>
                 setEditingCompany({
                   ...editingCompany,
-                  requiredSkills: e.target.value,
+                  requiredCgpa: Number(
+                    e.target.value
+                  ),
                 })
               }
             />
@@ -187,14 +319,14 @@ export default function Companies() {
                 onClick={() =>
                   setEditingCompany(null)
                 }
-                className="px-4 py-2 bg-gray-500 text-white rounded"
+                className="bg-gray-500 text-white px-4 py-2 rounded"
               >
                 Cancel
               </button>
 
               <button
                 onClick={handleSave}
-                className="px-4 py-2 bg-blue-500 text-white rounded"
+                className="bg-blue-500 text-white px-4 py-2 rounded"
               >
                 Save
               </button>
@@ -203,17 +335,26 @@ export default function Companies() {
         </div>
       )}
 
-      <div>
-        <h1 className="text-3xl font-bold mb-6">
+      <div className="flex justify-between items-center mb-6">
+        <h1 className="text-3xl font-bold">
           Companies
         </h1>
 
-        <CompanyTable
-          companies={companies}
-          onDelete={handleDelete}
-          onEdit={handleEdit}
-        />
+        <button
+          onClick={() =>
+            setShowAddModal(true)
+          }
+          className="bg-green-500 hover:bg-green-600 text-white px-4 py-2 rounded"
+        >
+          + Add Company
+        </button>
       </div>
+
+      <CompanyTable
+        companies={companies}
+        onDelete={handleDelete}
+        onEdit={handleEdit}
+      />
     </>
   );
 }

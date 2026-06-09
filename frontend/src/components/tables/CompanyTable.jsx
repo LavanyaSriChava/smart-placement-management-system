@@ -15,13 +15,14 @@ export default function CompanyTable({
     <div className="bg-white rounded-xl shadow overflow-x-auto">
       <table className="w-full">
         <thead className="bg-gray-100">
-          <tr>
-            <th className="p-3 text-left">Company</th>
-            <th className="p-3 text-left">Package</th>
-            <th className="p-3 text-left">Deadline</th>
-            <th className="p-3 text-left">Action</th>
-          </tr>
-        </thead>
+  <tr>
+    <th className="p-3 text-left">Company</th>
+    <th className="p-3 text-left">Role</th>
+    <th className="p-3 text-left">CTC</th>
+    <th className="p-3 text-left">CGPA</th>
+    <th className="p-3 text-left">Action</th>
+  </tr>
+</thead>
 
         <tbody>
           {companies.map((company) => (
@@ -29,18 +30,21 @@ export default function CompanyTable({
               key={company.id}
               className="border-t hover:bg-gray-50"
             >
-              <td className="p-3">
-                {company.companyName || company.company}
-              </td>
+             <td className="p-3">
+  {company.companyName}
+</td>
 
-              <td className="p-3">
-                {company.package || "N/A"}
-              </td>
+<td className="p-3">
+  {company.role}
+</td>
 
-              <td className="p-3">
-                {company.deadline || "N/A"}
-              </td>
+<td className="p-3">
+  {company.ctc} LPA
+</td>
 
+<td className="p-3">
+  {company.requiredCgpa}
+</td>
               <td className="p-3">
                 <button
   onClick={() => onEdit(company)}
