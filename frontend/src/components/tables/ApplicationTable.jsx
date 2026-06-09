@@ -1,6 +1,11 @@
 import StatusBadge from "../common/StatusBadge";
 
-export default function ApplicationTable({ applications }) {
+export default function ApplicationTable({
+  applications,
+  users,
+  companies,
+  onStatusUpdate,
+}) {
   if (applications.length === 0) {
     return (
       <div className="bg-white p-8 rounded-xl shadow text-center text-gray-500">
@@ -22,40 +27,80 @@ export default function ApplicationTable({ applications }) {
         </thead>
 
         <tbody>
-          {applications.map((app) => (
-            <tr
-              key={app.id}
-              className="border-t hover:bg-gray-50"
-            >
-              <td className="p-3">
-                {app.studentName || app.student || "N/A"}
-              </td>
+          {applications.map((app) => {
+  const student = users.find(
+    (u) => u.id === app.studentId
+  );
 
-              <td className="p-3">
-                {app.companyName || app.company || "N/A"}
-              </td>
+  const company = companies.find(
+    (c) => c.id === app.companyId
+  );
 
-              <td className="p-3">
-                <StatusBadge
-                  status={app.status || "Applied"}
-                />
-              </td>
+  return (
+    <tr
+      key={app.id}
+      className="border-t hover:bg-gray-50"
+    >
+      <td className="p-3">
+        {student?.name || `Student #${app.studentId}`}
+      </td>
 
-              <td className="p-3 space-x-2">
-                <button className="bg-blue-500 hover:bg-blue-600 text-white px-3 py-1 rounded">
-                  Shortlist
-                </button>
+      <td className="p-3">
+        {company?.companyName || `Company #${app.companyId}`}
+      </td>
 
-                <button className="bg-red-500 hover:bg-red-600 text-white px-3 py-1 rounded">
-                  Reject
-                </button>
+      <td className="p-3">
+        <StatusBadge status={app.status} />
+      </td>
 
-                <button className="bg-green-500 hover:bg-green-600 text-white px-3 py-1 rounded">
-                  Place
-                </button>
-              </td>
-            </tr>
-          ))}
+      <td className="p-3 space-x-2">
+        <button
+  onClick={() => {
+    if (
+      window.confirm(
+        "Shortlist this application?"
+      )
+    ) {
+      onStatusUpdate(app, "Shortlisted");
+    }
+  }}
+  className="bg-blue-500 hover:bg-blue-600 text-white px-3 py-1 rounded"
+>
+  Shortlist
+</button>
+        <button
+  onClick={() => {
+    if (
+      window.confirm(
+        "Are you sure you want to reject this application?"
+      )
+    ) {
+      onStatusUpdate(app, "Rejected");
+    }
+  }}
+  className="bg-red-500 hover:bg-red-600 text-white px-3 py-1 rounded"
+>
+  Reject
+</button>
+
+       <button
+  onClick={() => {
+    if (
+      window.confirm(
+        "Confirm placement of this student?"
+      )
+    ) {
+      onStatusUpdate(app, "Placed");
+    }
+  }}
+  className="bg-green-500 hover:bg-green-600 text-white px-3 py-1 rounded"
+>
+  Place
+</button>
+      </td>
+    </tr>
+  );
+})}
         </tbody>
       </table>
     </div>
