@@ -1,27 +1,48 @@
-import CompanyTable from "../components/tables/CompanyTable";
 import { useEffect, useState } from "react";
+import CompanyTable from "../components/tables/CompanyTable";
 import { getCompanies } from "../api/companyApi";
+
 export default function Companies() {
-    const [companies, setCompanies] = useState([]);
+  const [companies, setCompanies] = useState([]);
+  const [loading, setLoading] = useState(true);
+  const [error, setError] = useState("");
 
-useEffect(() => {
-  getCompanies()
-    .then(setCompanies)
-    .catch(console.error);
-}, []);
+  useEffect(() => {
+    getCompanies()
+      .then((data) => {
+        setCompanies(data);
+        setLoading(false);
+      })
+      .catch((err) => {
+        console.error(err);
+        setError("Failed to load companies");
+        setLoading(false);
+      });
+  }, []);
+
+  if (loading) {
     return (
-    <div>
-      <div className="flex justify-between items-center mb-6">
-        <h1 className="text-3xl font-bold">
-          Companies
-        </h1>
-
-        <button className="bg-green-600 text-white px-4 py-2 rounded-lg">
-          Add Company
-        </button>
+      <div className="bg-white p-6 rounded-xl shadow">
+        Loading companies...
       </div>
+    );
+  }
 
-      <CompanyTable />
+  if (error) {
+    return (
+      <div className="bg-red-100 text-red-700 p-4 rounded-xl">
+        {error}
+      </div>
+    );
+  }
+
+  return (
+    <div>
+      <h1 className="text-3xl font-bold mb-6">
+        Companies
+      </h1>
+
+      <CompanyTable companies={companies} />
     </div>
   );
 }

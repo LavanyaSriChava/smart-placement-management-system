@@ -1,5 +1,7 @@
-import PlacementChart from "../components/charts/PlacementChart";
 import BranchChart from "../components/charts/BranchChart";
+import PlacementChart from "../components/charts/PlacementChart";
+import BacklogsChart from "../components/charts/BacklogsChart";
+
 export default function Analytics() {
   return (
     <div>
@@ -7,8 +9,14 @@ export default function Analytics() {
         Analytics
       </h1>
 
-      <PlacementChart />
-      <BranchChart />
+      <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
+        <BranchChart />
+        <PlacementChart />
+      </div>
+
+      <div className="mt-6">
+        <BacklogsChart />
+      </div>
     </div>
   );
 }

@@ -1,16 +1,18 @@
 import StatCard from "../components/cards/StatCard";
+import RecentStudents from "../components/dashboard/RecentStudents";
 import useDashboardStats from "../hooks/useDashboardStats";
-
+import PlacementChart from "../components/charts/PlacementChart";
 export default function Dashboard() {
   const stats = useDashboardStats();
 
   return (
-    <div>
+    <div className="space-y-6">
       <h1 className="text-3xl font-bold mb-6">
         Dashboard
       </h1>
 
-      <div className="grid grid-cols-4 gap-6">
+      {/* Stats Cards */}
+      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
         <StatCard
           title="Students"
           value={stats.students}
@@ -31,6 +33,10 @@ export default function Dashboard() {
           value="0"
         />
       </div>
+
+      {/* Recent Students */}
+      <PlacementChart />
+<RecentStudents />
     </div>
   );
 }
