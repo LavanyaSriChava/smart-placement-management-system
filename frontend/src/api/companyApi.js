@@ -24,3 +24,11 @@ export const updateCompany = async (
 
   return response.data;
 };
+export const addCompany = async (companyData) => {
+  const response = await axios.post(
+    "http://localhost:8080/api/companies",
+    companyData
+  );
+
+  return response.data;
+};
