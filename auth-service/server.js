@@ -6,7 +6,8 @@ const pool = require("./config/db");
 
 const authRoutes = require("./routes/authRoutes");
 const notificationRoutes = require("./routes/notificationRoutes");
-
+const resumeRoutes =
+require("./routes/resumeRoutes");
 dotenv.config();
 
 const app = express();
@@ -25,6 +26,10 @@ app.use(cors());
 app.use(express.json());
 
 // Routes
+app.use(
+    "/api/upload",
+    resumeRoutes
+);
 app.use("/api/auth", authRoutes);
 app.use("/api/notifications", notificationRoutes);
 
