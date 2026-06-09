@@ -14,29 +14,31 @@ export default function Dashboard() {
       {/* Stats Cards */}
       <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
         <StatCard
-          title="Students"
-          value={stats.students}
-        />
+  title="Students"
+  value={stats.students}
+/>
 
-        <StatCard
-          title="Companies"
-          value="0"
-        />
+<StatCard
+  title="Companies"
+  value={stats.companies}
+/>
 
-        <StatCard
-          title="Applications"
-          value="0"
-        />
+<StatCard
+  title="Applications"
+  value={stats.applications}
+/>
 
-        <StatCard
-          title="Placed"
-          value="0"
-        />
+<StatCard
+  title="Placed"
+  value={stats.placed}
+/>
       </div>
 
       {/* Recent Students */}
-      <PlacementChart />
-<RecentStudents />
+     <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
+  <PlacementChart />
+  <RecentStudents />
+</div>
     </div>
   );
 }

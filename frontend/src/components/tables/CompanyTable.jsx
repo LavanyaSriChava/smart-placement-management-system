@@ -1,4 +1,8 @@
-export default function CompanyTable({ companies }) {
+export default function CompanyTable({
+  companies,
+  onDelete,
+  onEdit,
+}) {
   if (companies.length === 0) {
     return (
       <div className="bg-white p-8 rounded-xl shadow text-center text-gray-500">
@@ -38,13 +42,27 @@ export default function CompanyTable({ companies }) {
               </td>
 
               <td className="p-3">
-                <button className="bg-blue-500 hover:bg-blue-600 text-white px-3 py-1 rounded">
-                  Edit
-                </button>
+                <button
+  onClick={() => onEdit(company)}
+  className="bg-blue-500 hover:bg-blue-600 text-white px-3 py-1 rounded"
+>
+  Edit
+</button>
 
-                <button className="bg-red-500 hover:bg-red-600 text-white px-3 py-1 rounded ml-2">
-                  Delete
-                </button>
+                <button
+  onClick={() => {
+    if (
+      window.confirm(
+        `Are you sure you want to delete ${company.companyName}?`
+      )
+    ) {
+      onDelete(company.id);
+    }
+  }}
+  className="bg-red-500 hover:bg-red-600 text-white px-3 py-1 rounded ml-2"
+>
+  Delete
+</button>
               </td>
             </tr>
           ))}
