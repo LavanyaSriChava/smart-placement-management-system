@@ -1,5 +1,5 @@
 import PlacementChart from "../components/charts/PlacementChart";
-
+import BranchChart from "../components/charts/BranchChart";
 export default function Analytics() {
   return (
     <div>
@@ -8,6 +8,7 @@ export default function Analytics() {
       </h1>
 
       <PlacementChart />
+      <BranchChart />
     </div>
   );
 }

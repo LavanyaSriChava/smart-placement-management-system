@@ -1,7 +1,15 @@
 import CompanyTable from "../components/tables/CompanyTable";
-
+import { useEffect, useState } from "react";
+import { getCompanies } from "../api/companyApi";
 export default function Companies() {
-  return (
+    const [companies, setCompanies] = useState([]);
+
+useEffect(() => {
+  getCompanies()
+    .then(setCompanies)
+    .catch(console.error);
+}, []);
+    return (
     <div>
       <div className="flex justify-between items-center mb-6">
         <h1 className="text-3xl font-bold">
