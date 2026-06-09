@@ -1,21 +1,14 @@
-export default function CompanyTable() {
-  const companies = [
-    {
-      id: 1,
-      company: "Google",
-      package: "25 LPA",
-      deadline: "2026-07-15",
-    },
-    {
-      id: 2,
-      company: "Amazon",
-      package: "22 LPA",
-      deadline: "2026-07-20",
-    },
-  ];
+export default function CompanyTable({ companies }) {
+  if (companies.length === 0) {
+    return (
+      <div className="bg-white p-8 rounded-xl shadow text-center text-gray-500">
+        No companies available
+      </div>
+    );
+  }
 
   return (
-    <div className="bg-white rounded-xl shadow overflow-hidden">
+    <div className="bg-white rounded-xl shadow overflow-x-auto">
       <table className="w-full">
         <thead className="bg-gray-100">
           <tr>
@@ -30,26 +23,26 @@ export default function CompanyTable() {
           {companies.map((company) => (
             <tr
               key={company.id}
-              className="border-t"
+              className="border-t hover:bg-gray-50"
             >
               <td className="p-3">
-                {company.company}
+                {company.companyName || company.company}
               </td>
 
               <td className="p-3">
-                {company.package}
+                {company.package || "N/A"}
               </td>
 
               <td className="p-3">
-                {company.deadline}
+                {company.deadline || "N/A"}
               </td>
 
               <td className="p-3">
-                <button className="bg-blue-500 text-white px-3 py-1 rounded">
+                <button className="bg-blue-500 hover:bg-blue-600 text-white px-3 py-1 rounded">
                   Edit
                 </button>
 
-                <button className="bg-red-500 text-white px-3 py-1 rounded ml-2">
+                <button className="bg-red-500 hover:bg-red-600 text-white px-3 py-1 rounded ml-2">
                   Delete
                 </button>
               </td>
