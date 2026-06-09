@@ -3,14 +3,13 @@ export default function CompanyTable({
   onDelete,
   onEdit,
 }) {
-  if (companies.length === 0) {
-    return (
-      <div className="bg-white p-8 rounded-xl shadow text-center text-gray-500">
-        No companies available
-      </div>
-    );
-  }
-
+  if (!companies || companies.length === 0) {
+  return (
+    <div className="bg-white p-8 rounded-xl shadow text-center text-gray-500">
+      No companies available
+    </div>
+  );
+}
   return (
     <div className="bg-white rounded-xl shadow overflow-x-auto">
       <table className="w-full">
@@ -38,12 +37,12 @@ export default function CompanyTable({
   {company.role}
 </td>
 
-<td className="p-3">
-  {company.ctc} LPA
+<td className="p-3 font-medium text-green-600">
+  ₹{company.ctc} LPA
 </td>
 
 <td className="p-3">
-  {company.requiredCgpa}
+  {company.requiredCgpa}/10
 </td>
               <td className="p-3">
                 <button

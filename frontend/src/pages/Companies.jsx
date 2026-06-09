@@ -53,7 +53,7 @@ export default function Companies() {
       );
     } catch (error) {
       console.error(error);
-      alert("Failed to delete company");
+     toast.error("Failed to delete company");
     }
   };
 
@@ -79,7 +79,7 @@ export default function Companies() {
       setEditingCompany(null);
     } catch (error) {
       console.error(error);
-      alert("Failed to update company");
+      toast.error("Failed to update company");
     }
   };
 
@@ -107,7 +107,7 @@ export default function Companies() {
       setShowAddModal(false);
     } catch (error) {
       console.error(error);
-      alert("Failed to add company");
+      toast.error("Failed to add company");
     }
   };
 
