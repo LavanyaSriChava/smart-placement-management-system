@@ -1,15 +1,14 @@
+const dotenv = require("dotenv");
+dotenv.config();
+
 const express = require("express");
 const cors = require("cors");
-const dotenv = require("dotenv");
 
 const pool = require("./config/db");
 
 const authRoutes = require("./routes/authRoutes");
 const notificationRoutes = require("./routes/notificationRoutes");
-const resumeRoutes =
-require("./routes/resumeRoutes");
-dotenv.config();
-
+const resumeRoutes = require("./routes/resumeRoutes");
 const app = express();
 
 // Database Connection
