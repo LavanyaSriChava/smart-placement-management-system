@@ -1,5 +1,6 @@
 const cloudinary = require("../config/cloudinary");
 const streamifier = require("streamifier");
+const axios = require("axios");
 
 exports.uploadResume = async (req, res) => {
     try {
@@ -29,7 +30,8 @@ exports.uploadResume = async (req, res) => {
                     }
                 );
 
-                streamifier.createReadStream(req.file.buffer)
+                streamifier
+                    .createReadStream(req.file.buffer)
                     .pipe(stream);
 
             });
@@ -37,10 +39,22 @@ exports.uploadResume = async (req, res) => {
 
         const result = await uploadFromBuffer();
 
-        res.status(200).json({
-            message: "Resume uploaded successfully",
+        // Save metadata in Spring Boot
+        const resumeData = {
+            studentId: 1, // temporary for testing
             fileName: req.file.originalname,
             resumeUrl: result.secure_url
+        };
+
+        const springResponse = await axios.post(
+            "http://localhost:8080/api/resumes",
+            resumeData
+        );
+
+        res.status(200).json({
+            message: "Resume uploaded and saved successfully",
+            cloudinaryUrl: result.secure_url,
+            resumeRecord: springResponse.data
         });
 
     } catch (error) {
