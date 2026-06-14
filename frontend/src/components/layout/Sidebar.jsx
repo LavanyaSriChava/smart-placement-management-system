@@ -2,10 +2,9 @@ import { NavLink } from "react-router-dom";
 
 export default function Sidebar() {
   const linkClass = ({ isActive }) =>
-    `block px-3 py-2 rounded-lg ${
-      isActive
-        ? "bg-blue-600 text-white"
-        : "text-gray-300 hover:bg-gray-800"
+    `block px-3 py-2 rounded-lg ${isActive
+      ? "bg-blue-600 text-white"
+      : "text-gray-300 hover:bg-gray-800"
     }`;
 
   return (
@@ -15,23 +14,27 @@ export default function Sidebar() {
       </h1>
 
       <div className="space-y-3">
-        <NavLink to="/" className={linkClass}>
+        <NavLink
+          to="/admin"
+          end
+          className={linkClass}
+        >
           Dashboard
         </NavLink>
 
-        <NavLink to="/students" className={linkClass}>
+        <NavLink to="/admin/students" className={linkClass}>
           Students
         </NavLink>
 
-        <NavLink to="/companies" className={linkClass}>
+        <NavLink to="/admin/companies" className={linkClass}>
           Companies
         </NavLink>
 
-        <NavLink to="/applications" className={linkClass}>
+        <NavLink to="/admin/applications" className={linkClass}>
           Applications
         </NavLink>
 
-        <NavLink to="/analytics" className={linkClass}>
+        <NavLink to="/admin/analytics" className={linkClass}>
           Analytics
         </NavLink>
       </div>

@@ -1,25 +1,38 @@
 import { BrowserRouter, Routes, Route } from "react-router-dom";
 
-import Dashboard from "./pages/Dashboard";
-import Students from "./pages/Students";
-import Companies from "./pages/Companies";
-import Applications from "./pages/Applications";
-import Analytics from "./pages/Analytics";
+import Navbar from "./components/student/Navbar";
+import StudentRoutes from "./routes/StudentRoutes";
 
 import AdminLayout from "./components/layout/AdminLayout";
+import AdminRoutes from "./routes/AdminRoutes";
 
 function App() {
   return (
     <BrowserRouter>
-      <AdminLayout>
-        <Routes>
-          <Route path="/" element={<Dashboard />} />
-          <Route path="/students" element={<Students />} />
-          <Route path="/companies" element={<Companies />} />
-          <Route path="/applications" element={<Applications />} />
-          <Route path="/analytics" element={<Analytics />} />
-        </Routes>
-      </AdminLayout>
+      <Routes>
+
+        {/* Admin Module */}
+        <Route
+          path="/admin/*"
+          element={
+            <AdminLayout>
+              <AdminRoutes />
+            </AdminLayout>
+          }
+        />
+
+        {/* Student Module */}
+        <Route
+          path="/*"
+          element={
+            <>
+              <Navbar />
+              <StudentRoutes />
+            </>
+          }
+        />
+
+      </Routes>
     </BrowserRouter>
   );
 }
