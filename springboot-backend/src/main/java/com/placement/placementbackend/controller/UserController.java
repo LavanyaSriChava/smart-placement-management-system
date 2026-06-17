@@ -1,5 +1,6 @@
 package com.placement.placementbackend.controller;
 
+import com.placement.placementbackend.dto.UpdateUserDTO;
 import com.placement.placementbackend.dto.UserRequestDTO;
 import com.placement.placementbackend.dto.UserResponseDTO;
 import com.placement.placementbackend.service.UserService;
@@ -35,7 +36,7 @@ public class UserController {
     @PutMapping("/update/{id}")
     public UserResponseDTO updateUser(
             @PathVariable Long id,
-            @Valid @RequestBody UserRequestDTO updatedUser) {
+            @RequestBody UpdateUserDTO updatedUser) {
 
         return userService.updateUser(id, updatedUser);
     }

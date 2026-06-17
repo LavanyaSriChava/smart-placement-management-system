@@ -1,5 +1,6 @@
 package com.placement.placementbackend.service;
 
+import com.placement.placementbackend.dto.UpdateUserDTO;
 import com.placement.placementbackend.dto.UserRequestDTO;
 import com.placement.placementbackend.dto.UserResponseDTO;
 import com.placement.placementbackend.entity.User;
@@ -53,17 +54,15 @@ public class UserService {
     }
 
     // ================= UPDATE USER =================
-    public UserResponseDTO updateUser(Long id,
-                                      UserRequestDTO updatedUser) {
+    public UserResponseDTO updateUser(
+            Long id,
+            UpdateUserDTO updatedUser) {
 
         User existingUser = userRepository.findById(id)
                 .orElseThrow(() ->
                         new ResourceNotFoundException("User Not Found"));
 
         existingUser.setName(updatedUser.getName());
-        existingUser.setEmail(updatedUser.getEmail());
-        existingUser.setPassword(updatedUser.getPassword());
-        existingUser.setRole(updatedUser.getRole());
 
         // ================= STUDENT FIELDS =================
         existingUser.setCgpa(updatedUser.getCgpa());
