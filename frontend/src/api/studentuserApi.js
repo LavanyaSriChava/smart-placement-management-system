@@ -1,7 +1,7 @@
 import axios from "axios";
 
 const API_URL =
-  "http://localhost:8080/api/users";
+   "https://bruna-subvertebral-illustriously.ngrok-free.dev/api/users";
 
 export const getUserById = async (id) => {
   return axios.get(

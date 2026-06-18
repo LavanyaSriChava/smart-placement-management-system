@@ -1,10 +1,10 @@
 import axios from "axios";
 
 const NODE_API =
-  "http://localhost:5000/api/upload";
+  "https://ovary-armless-distill.ngrok-free.dev/api/upload";
 
 const SPRING_API =
-  "http://localhost:8080/api/resumes";
+  "https://bruna-subvertebral-illustriously.ngrok-free.dev/api/resumes";
 
 export const uploadResume = async (file) => {
 

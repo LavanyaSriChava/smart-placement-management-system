@@ -1,7 +1,7 @@
 import axios from "axios";
 
 const API_URL =
-  "http://localhost:8080/api/applications";
+   "https://bruna-subvertebral-illustriously.ngrok-free.dev/api/applications";
 
 export const getApplicationsByStudentId =
   async (studentId) => {
