@@ -1,7 +1,6 @@
 import axios from "axios";
 
-const API_URL =
-  "https://bruna-subvertebral-illustriously.ngrok-free.dev/api/companies";
+const API_URL = "http://localhost:8080/api/companies";
 
 export const getCompanies = async () => {
   const response = await axios.get(API_URL);
