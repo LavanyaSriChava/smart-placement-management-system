@@ -1,10 +1,11 @@
 import axios from "axios";
 
 const NODE_API =
-  "https://ovary-armless-distill.ngrok-free.dev/api/upload";
+  "http://localhost:5000/api/notifications";
+
 
 const SPRING_API =
-  "https://bruna-subvertebral-illustriously.ngrok-free.dev/api/resumes";
+  "http://localhost:5000/api/notifications";
 
 export const uploadResume = async (file) => {
 

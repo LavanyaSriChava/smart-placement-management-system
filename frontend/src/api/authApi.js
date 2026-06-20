@@ -1,8 +1,7 @@
 import axios from "axios";
 
 const AUTH_BASE_URL =
-  "https://ovary-armless-distill.ngrok-free.dev/api/auth";
-
+  "http://localhost:5000/api/auth";
 export const loginUser = (loginData) => {
   return axios.post(
     `${AUTH_BASE_URL}/login`,

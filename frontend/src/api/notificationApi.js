@@ -1,7 +1,8 @@
 import axios from "axios";
 
 const API_URL =
-  "https://ovary-armless-distill.ngrok-free.dev/api/notifications";
+  "http://localhost:5000/api/notifications";
+
 export const getNotifications =
   async (userId) => {
 
