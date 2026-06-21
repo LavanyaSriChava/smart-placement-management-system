@@ -1,5 +1,7 @@
 const bcrypt = require("bcryptjs");
 const jwt = require("jsonwebtoken");
+
+const axios = require("axios");
 const pool = require("../config/db");
 exports.register = async (req, res) => {
 
@@ -30,22 +32,47 @@ exports.register = async (req, res) => {
         const hashedPassword =
             await bcrypt.hash(password, 10);
 
-        await pool.query(
-            `INSERT INTO users
-            (name,email,password,role,cgpa,branch,backlogs,skills)
-            VALUES($1,$2,$3,$4,$5,$6,$7,$8)`,
-            [
-                name,
-                email,
-                hashedPassword,
-                role,
-                cgpa,
-                branch,
-                backlogs,
-                skills
-            ]
-        );
+        const result = await pool.query(
+    `INSERT INTO users
+    (name,email,password,role,cgpa,branch,backlogs,skills)
+    VALUES($1,$2,$3,$4,$5,$6,$7,$8)
+    RETURNING *`,
+    [
+        name,
+        email,
+        hashedPassword,
+        role,
+        cgpa,
+        branch,
+        backlogs,
+        skills
+    ]
+);
+const savedUser = result.rows[0];
+console.log("Placement URL:", process.env.PLACEMENT_SERVICE_URL);
+console.log("Saved User:", savedUser);
+try {
+    const placementResponse = await axios.post(
+        process.env.PLACEMENT_SERVICE_URL,
+        {
+            authUserId: savedUser.id,
+            name: savedUser.name,
+            email: savedUser.email,
+            password: password,
+            role: savedUser.role.toUpperCase(),
+            cgpa: savedUser.cgpa || 0,
+            branch: savedUser.branch || "",
+            backlogs: savedUser.backlogs || 0,
+            skills: savedUser.skills || ""
+        }
+    );
 
+    console.log("Placement User Created:", placementResponse.data);
+
+} catch (err) {
+    console.log("Placement API Error:");
+    console.log(err.response?.data || err.message);
+}
         res.status(201).json({
             message: "User Registered Successfully"
         });
