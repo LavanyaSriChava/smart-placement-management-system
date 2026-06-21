@@ -11,6 +11,8 @@ public class UserResponseDTO {
 
     private String email;
 
+
+    private Long authUserId;
     private String role;
 
     private Double cgpa;
