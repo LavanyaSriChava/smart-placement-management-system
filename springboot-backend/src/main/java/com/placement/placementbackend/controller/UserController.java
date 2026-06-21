@@ -24,7 +24,12 @@ public class UserController {
 
         return userService.getAllUsers();
     }
+    @PostMapping
+    public UserResponseDTO createUser(
+            @Valid @RequestBody UserRequestDTO userRequestDTO) {
 
+        return userService.createUser(userRequestDTO);
+    }
     // ================= GET USER BY ID =================
     @GetMapping("/{id}")
     public UserResponseDTO getUserById(@PathVariable Long id) {
@@ -40,7 +45,13 @@ public class UserController {
 
         return userService.updateUser(id, updatedUser);
     }
+    @GetMapping("/auth/{authUserId}")
+    public UserResponseDTO getUserByAuthUserId(
+            @PathVariable Long authUserId) {
 
+        return userService
+                .getUserByAuthUserId(authUserId);
+    }
     // ================= DELETE USER =================
     @DeleteMapping("/delete/{id}")
     public String deleteUser(@PathVariable Long id) {
