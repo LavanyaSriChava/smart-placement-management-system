@@ -18,3 +18,19 @@ export const getAllApplications =
     return axios.get(API_URL);
 
 };
+
+export const applyToCompany = async (
+  studentId,
+  companyId
+) => {
+
+  return axios.post(
+    `${API_URL}/apply`,
+    {
+      studentId,
+      companyId,
+      status: "APPLIED"
+    }
+  );
+
+};

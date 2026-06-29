@@ -1,7 +1,9 @@
+import { getCompanies } from "../../api/studentCompanyApi";
+import { jwtDecode } from "jwt-decode";
 import { useEffect, useState } from "react";
 import {
   getApplicationsByStudentId,
-} from  "../../api/studentApplicationApi";
+} from "../../api/studentApplicationApi";
 
 import {
   FaFileAlt,
@@ -17,16 +19,27 @@ function Applications() {
   const [loading, setLoading] =
     useState(true);
 
+  const [companyMap, setCompanyMap] =
+    useState({});
+
   useEffect(() => {
     fetchApplications();
+    fetchCompanies();
   }, []);
 
   const fetchApplications =
     async () => {
       try {
+
+        const token =
+          localStorage.getItem("token");
+
+        const user =
+          jwtDecode(token);
+
         const response =
           await getApplicationsByStudentId(
-            1
+            user.id
           );
 
         console.log(
@@ -37,12 +50,45 @@ function Applications() {
         setApplications(
           response.data
         );
+
       } catch (error) {
+
         console.error(error);
+
       } finally {
+
         setLoading(false);
+
       }
     };
+
+  const fetchCompanies = async () => {
+
+    try {
+
+      const response =
+        await getCompanies();
+
+      const map = {};
+
+      response.data.forEach(
+        (company) => {
+
+          map[company.id] =
+            company.companyName;
+
+        }
+      );
+
+      setCompanyMap(map);
+
+    } catch (error) {
+
+      console.error(error);
+
+    }
+
+  };
 
   const shortlistedCount =
     applications.filter(
@@ -197,7 +243,7 @@ function Applications() {
                       <div className="w-12 h-12 rounded-full bg-blue-100 flex items-center justify-center">
 
                         {status ===
-                        "SHORTLISTED" ? (
+                          "SHORTLISTED" ? (
 
                           <FaCheckCircle
                             className="text-green-600"
@@ -223,10 +269,8 @@ function Applications() {
                       <div className="flex-1">
 
                         <h3 className="font-semibold text-lg text-slate-800">
-                          Company ID:{" "}
-                          {
-                            application.companyId
-                          }
+                          {companyMap[application.companyId] ||
+                            `Company ID: ${application.companyId}`}
                         </h3>
 
                         <p className="text-gray-600 mt-1">

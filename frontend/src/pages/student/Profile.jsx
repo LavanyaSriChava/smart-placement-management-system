@@ -1,3 +1,4 @@
+import { jwtDecode } from "jwt-decode";
 import { useEffect, useState } from "react";
 import {
   getUserById,
@@ -24,7 +25,11 @@ function Profile() {
 
     try {
 
-      const response = await getUserById(1);
+      const token = localStorage.getItem("token");
+      const user = jwtDecode(token);
+
+      const response =
+        await getUserById(user.id);
 
       console.log(response.data);
 
@@ -52,7 +57,7 @@ function Profile() {
     try {
 
       const response = await updateUser(
-        1,
+        user.id,
         user
       );
 

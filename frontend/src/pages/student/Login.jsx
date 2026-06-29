@@ -19,10 +19,14 @@ function Login() {
         password
       });
 
+      localStorage.setItem(
+        "token",
+        response.data.token
+      );
+
       console.log(response.data);
 
       navigate("/dashboard");
-
     } catch (error) {
 
       console.log(error);

@@ -1,3 +1,4 @@
+import { jwtDecode } from "jwt-decode";
 import { useEffect, useState } from "react";
 import {
   uploadResume,
@@ -21,8 +22,14 @@ function ResumeUpload() {
 
   const fetchResume = async () => {
     try {
+      const token =
+        localStorage.getItem("token");
+
+      const user =
+        jwtDecode(token);
+
       const response =
-        await getResumeByStudentId(1);
+        await getResumeByStudentId(user.id);
 
       setResume(response.data);
     } catch (error) {
@@ -52,18 +59,18 @@ function ResumeUpload() {
 
       fetchResume();
     } catch (error) {
-  console.error("Full Error:", error);
+      console.error("Full Error:", error);
 
-  console.log(
-    "Response Data:",
-    error.response?.data
-  );
+      console.log(
+        "Response Data:",
+        error.response?.data
+      );
 
-  console.log(
-    "Status:",
-    error.response?.status
-  );
-}
+      console.log(
+        "Status:",
+        error.response?.status
+      );
+    }
   };
 
   return (
@@ -163,9 +170,9 @@ function ResumeUpload() {
         </div>
 
         {/* Selected File Preview */}
-       {file && (
-  <div
-    className="
+        {file && (
+          <div
+            className="
       mt-6
       bg-blue-50
       border
@@ -176,12 +183,12 @@ function ResumeUpload() {
       duration-300
       hover:shadow-md
     "
-  >
-    <div className="flex items-center gap-4">
+          >
+            <div className="flex items-center gap-4">
 
-      {/* PDF Icon */}
-      <div
-        className="
+              {/* PDF Icon */}
+              <div
+                className="
           w-14
           h-14
           rounded-full
@@ -191,39 +198,39 @@ function ResumeUpload() {
           justify-center
           text-white
         "
-      >
-        <FaFilePdf size={24} />
-      </div>
+              >
+                <FaFilePdf size={24} />
+              </div>
 
-      {/* File Details */}
-      <div className="flex-1 min-w-0">
+              {/* File Details */}
+              <div className="flex-1 min-w-0">
 
-        <p
-          className="
+                <p
+                  className="
             font-semibold
             text-slate-800
             truncate
           "
-        >
-          {file.name}
-        </p>
+                >
+                  {file.name}
+                </p>
 
-        <p className="text-sm text-gray-500 mt-1">
-          {file.size > 1024 * 1024
-            ? `${(
-                file.size /
-                (1024 * 1024)
-              ).toFixed(2)} MB`
-            : `${(
-                file.size / 1024
-              ).toFixed(1)} KB`}
-        </p>
+                <p className="text-sm text-gray-500 mt-1">
+                  {file.size > 1024 * 1024
+                    ? `${(
+                      file.size /
+                      (1024 * 1024)
+                    ).toFixed(2)} MB`
+                    : `${(
+                      file.size / 1024
+                    ).toFixed(1)} KB`}
+                </p>
 
-      </div>
+              </div>
 
-      {/* Status Badge */}
-      <span
-        className="
+              {/* Status Badge */}
+              <span
+                className="
           bg-green-100
           text-green-700
           px-3
@@ -232,13 +239,13 @@ function ResumeUpload() {
           text-sm
           font-medium
         "
-      >
-        Ready
-      </span>
+              >
+                Ready
+              </span>
 
-    </div>
-  </div>
-)}
+            </div>
+          </div>
+        )}
 
         <button
           onClick={handleUpload}

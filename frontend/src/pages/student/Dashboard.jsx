@@ -1,3 +1,5 @@
+import { getCompanies } from "../../api/studentCompanyApi";
+import { jwtDecode } from "jwt-decode";
 import { useEffect, useState } from "react";
 import StatCard from "../../components/student/StatCard";
 import { getUserById } from "../../api/studentUserApi";
@@ -21,10 +23,15 @@ function Dashboard() {
   const [appliedCompanies, setAppliedCompanies] =
     useState([]);
 
+  const [companyMap, setCompanyMap] = useState({});
+
+  const [eligibleCount, setEligibleCount] = useState(0);
+
   useEffect(() => {
 
     fetchStudent();
     fetchApplications();
+    fetchCompanies();
 
   }, []);
 
@@ -32,14 +39,20 @@ function Dashboard() {
 
     try {
 
+      const token =
+        localStorage.getItem("token");
+
+      const user =
+        jwtDecode(token);
+
       const response =
-        await getUserById(1);
+        await getUserById(user.id);
 
       console.log("Full Response:", response);
       console.log("Student Data:", response.data);
-      
-      setStudent(response.data);
 
+      setStudent(response.data);
+      calculateEligibility(response.data);
     } catch (error) {
 
       console.error(error);
@@ -52,8 +65,14 @@ function Dashboard() {
 
     try {
 
+      const token =
+        localStorage.getItem("token");
+
+      const user =
+        jwtDecode(token);
+
       const response =
-        await getApplicationsByStudentId(1);
+        await getApplicationsByStudentId(user.id);
 
       console.log(
         "Applications:",
@@ -72,21 +91,91 @@ function Dashboard() {
 
   };
 
-  const getStatusStyle = (status) => {
-  switch (status?.toUpperCase()) {
-    case "SHORTLISTED":
-      return "bg-green-100 text-green-700";
+  const fetchCompanies = async () => {
 
-    case "REJECTED":
-      return "bg-red-100 text-red-700";
+  try {
 
-    case "PLACED":
-      return "bg-blue-100 text-blue-700";
+    const response = await getCompanies();
 
-    default:
-      return "bg-yellow-100 text-yellow-700";
+    console.log("Response:", response);
+    console.log("Response Data:", response.data);
+
+    const companies = response.data;
+
+    const map = {};
+
+    companies.forEach((company) => {
+      map[company.id] = company.companyName;
+    });
+
+    setCompanyMap(map);
+
+  } catch (error) {
+
+    console.error(error);
+
   }
+
 };
+
+  const calculateEligibility = async (studentData) => {
+
+    try {
+
+
+      const response = await getCompanies();
+
+      const companies = response.data;
+
+      const eligibleCompanies = companies.filter(company => {
+
+        const branchEligible =
+          company.eligibleBranches
+            ?.split(",")
+            .map(branch => branch.trim())
+            .includes(studentData.branch);
+
+        const cgpaEligible =
+          studentData.cgpa >= company.requiredCgpa;
+
+        const backlogEligible =
+          studentData.backlogs <= company.allowedBacklogs;
+
+        return (
+          branchEligible &&
+          cgpaEligible &&
+          backlogEligible
+        );
+
+      });
+
+      setEligibleCount(
+        eligibleCompanies.length
+      );
+
+    } catch (error) {
+
+      console.error(error);
+
+    }
+
+  };
+
+  const getStatusStyle = (status) => {
+    switch (status?.toUpperCase()) {
+      case "SHORTLISTED":
+        return "bg-green-100 text-green-700";
+
+      case "REJECTED":
+        return "bg-red-100 text-red-700";
+
+      case "PLACED":
+        return "bg-blue-100 text-blue-700";
+
+      default:
+        return "bg-yellow-100 text-yellow-700";
+    }
+  };
 
   return (
 
@@ -146,7 +235,7 @@ function Dashboard() {
 
         <StatCard
           title="Eligible Companies"
-          value="0"
+          value={eligibleCount}
           icon={<FaBuilding />}
         />
 
@@ -189,7 +278,8 @@ function Dashboard() {
               >
 
                 <span className="font-medium">
-                  {application.companyName}
+                  {companyMap[application.companyId] ||
+                    `Company ID: ${application.companyId}`}
                 </span>
 
                 <span

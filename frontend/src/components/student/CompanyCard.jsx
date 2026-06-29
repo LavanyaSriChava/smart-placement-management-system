@@ -1,4 +1,46 @@
-function CompanyCard({ company }) {
+import { toast } from "react-toastify";
+import { useState } from "react";
+import ConfirmationModal from "../common/ConfirmationModal";
+import { jwtDecode } from "jwt-decode";
+import { applyToCompany } from "../../api/studentapplicationApi";
+
+function CompanyCard({ company, alreadyApplied }) {
+
+  const [showModal, setShowModal] = useState(false);
+
+  const handleApply = async () => {
+    if (alreadyApplied) return;
+    try {
+
+      const token =
+        localStorage.getItem("token");
+
+      const user =
+        jwtDecode(token);
+
+      const response =
+        await applyToCompany(
+          user.id,
+          company.id
+        );
+
+      console.log(
+        "Application Submitted",
+        response.data
+      );
+
+      toast.success("Application Submitted Successfully");
+
+    } catch (error) {
+
+      console.error(error);
+
+      toast.error("Application Failed");
+
+    }
+
+  };
+
   return (
     <div className="bg-white p-6 rounded-lg shadow">
 
@@ -23,23 +65,36 @@ function CompanyCard({ company }) {
       </p>
 
       <p>
-        <strong>Eligible Branches:</strong>
-        {" "}
+        <strong>Eligible Branches:</strong>{" "}
         {company.eligibleBranches}
       </p>
 
       <p>
-        <strong>Required Skills:</strong>
-        {" "}
+        <strong>Required Skills:</strong>{" "}
         {company.requiredSkills}
       </p>
 
       <button
-        className="mt-4 w-full bg-green-600 text-white p-2 rounded hover:bg-green-700"
+        onClick={() => setShowModal(true)}
+        disabled={alreadyApplied}
+        className={`mt-4 w-full p-2 rounded text-white transition ${alreadyApplied
+          ? "bg-gray-400 cursor-not-allowed"
+          : "bg-green-600 hover:bg-green-700"
+          }`}
       >
-        Apply
+        {alreadyApplied ? "Applied" : "Apply"}
       </button>
-
+      
+      <ConfirmationModal
+        isOpen={showModal}
+        title="Confirm Application"
+        message={`Are you sure you want to apply for ${company.companyName}?`}
+        onCancel={() => setShowModal(false)}
+        onConfirm={() => {
+          setShowModal(false);
+          handleApply();
+        }}
+      />
     </div>
   );
 }
