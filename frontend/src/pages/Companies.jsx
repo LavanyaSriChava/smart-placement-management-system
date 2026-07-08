@@ -27,6 +27,7 @@ export default function Companies() {
       allowedBacklogs: 0,
       eligibleBranches: "",
       requiredSkills: "",
+      jobDescription: "",
     });
 
   useEffect(() => {
@@ -53,7 +54,7 @@ export default function Companies() {
       );
     } catch (error) {
       console.error(error);
-     toast.error("Failed to delete company");
+      toast.error("Failed to delete company");
     }
   };
 
@@ -102,6 +103,7 @@ export default function Companies() {
         allowedBacklogs: 0,
         eligibleBranches: "",
         requiredSkills: "",
+        jobDescription: "",
       });
 
       setShowAddModal(false);
@@ -223,6 +225,20 @@ export default function Companies() {
                     e.target.value,
                 })
               }
+            />
+
+            <textarea
+              className="border p-2 w-full mb-4 rounded"
+              placeholder="Job Description"
+              value={newCompany.jobDescription}
+              onChange={(e) =>
+                setNewCompany({
+                  ...newCompany,
+                  jobDescription: e.target.value,
+                })
+              }
+              required
+              rows={5}
             />
 
             <div className="flex justify-end gap-2">
