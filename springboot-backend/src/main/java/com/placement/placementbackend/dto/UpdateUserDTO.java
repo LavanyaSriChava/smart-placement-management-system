@@ -3,23 +3,11 @@ package com.placement.placementbackend.dto;
 import lombok.Data;
 
 @Data
-public class UserResponseDTO {
-
-    private Long id;
+public class UpdateUserDTO {
 
     private String name;
-
-    private String email;
-
-
-    private Long authUserId;
-    private String role;
-
     private Double cgpa;
-
     private String branch;
-
     private Integer backlogs;
-
     private String skills;
 }

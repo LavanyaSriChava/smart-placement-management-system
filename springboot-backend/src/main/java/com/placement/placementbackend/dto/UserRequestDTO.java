@@ -23,7 +23,7 @@ public class UserRequestDTO {
     @Min(value = 0, message = "CGPA cannot be negative")
     @Max(value = 10, message = "CGPA cannot exceed 10")
     private Double cgpa;
-
+    private Long authUserId;
     private String branch;
 
     @Min(value = 0, message = "Backlogs cannot be negative")

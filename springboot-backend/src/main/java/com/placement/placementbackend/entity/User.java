@@ -12,7 +12,8 @@ public class User {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
-
+    @Column(unique = true)
+    private Long authUserId;
     // ================= NAME =================
     @NotBlank(message = "Name is required")
     private String name;

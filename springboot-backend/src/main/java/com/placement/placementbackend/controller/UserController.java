@@ -1,5 +1,6 @@
 package com.placement.placementbackend.controller;
 
+import com.placement.placementbackend.dto.UpdateUserDTO;
 import com.placement.placementbackend.dto.UserRequestDTO;
 import com.placement.placementbackend.dto.UserResponseDTO;
 import com.placement.placementbackend.service.UserService;
@@ -23,7 +24,12 @@ public class UserController {
 
         return userService.getAllUsers();
     }
+    @PostMapping
+    public UserResponseDTO createUser(
+            @Valid @RequestBody UserRequestDTO userRequestDTO) {
 
+        return userService.createUser(userRequestDTO);
+    }
     // ================= GET USER BY ID =================
     @GetMapping("/{id}")
     public UserResponseDTO getUserById(@PathVariable Long id) {
@@ -35,11 +41,17 @@ public class UserController {
     @PutMapping("/update/{id}")
     public UserResponseDTO updateUser(
             @PathVariable Long id,
-            @Valid @RequestBody UserRequestDTO updatedUser) {
+            @RequestBody UpdateUserDTO updatedUser) {
 
         return userService.updateUser(id, updatedUser);
     }
+    @GetMapping("/auth/{authUserId}")
+    public UserResponseDTO getUserByAuthUserId(
+            @PathVariable Long authUserId) {
 
+        return userService
+                .getUserByAuthUserId(authUserId);
+    }
     // ================= DELETE USER =================
     @DeleteMapping("/delete/{id}")
     public String deleteUser(@PathVariable Long id) {

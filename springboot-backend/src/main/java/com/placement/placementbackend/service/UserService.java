@@ -1,5 +1,6 @@
 package com.placement.placementbackend.service;
 
+import com.placement.placementbackend.dto.UpdateUserDTO;
 import com.placement.placementbackend.dto.UserRequestDTO;
 import com.placement.placementbackend.dto.UserResponseDTO;
 import com.placement.placementbackend.entity.User;
@@ -25,6 +26,9 @@ public class UserService {
         dto.setName(user.getName());
         dto.setEmail(user.getEmail());
         dto.setRole(user.getRole());
+        dto.setAuthUserId(
+                user.getAuthUserId()
+        );
         dto.setCgpa(user.getCgpa());
         dto.setBranch(user.getBranch());
         dto.setBacklogs(user.getBacklogs());
@@ -33,6 +37,26 @@ public class UserService {
         return dto;
     }
 
+    public UserResponseDTO createUser(UserRequestDTO userRequestDTO) {
+
+        User user = new User();
+
+        user.setName(userRequestDTO.getName());
+        user.setEmail(userRequestDTO.getEmail());
+        user.setPassword(userRequestDTO.getPassword());
+        user.setRole(userRequestDTO.getRole());
+        user.setAuthUserId(
+                userRequestDTO.getAuthUserId()
+        );
+        user.setCgpa(userRequestDTO.getCgpa());
+        user.setBranch(userRequestDTO.getBranch());
+        user.setBacklogs(userRequestDTO.getBacklogs());
+        user.setSkills(userRequestDTO.getSkills());
+
+        User savedUser = userRepository.save(user);
+
+        return convertToResponseDTO(savedUser);
+    }
     // ================= GET ALL USERS =================
     public List<UserResponseDTO> getAllUsers() {
 
@@ -51,19 +75,30 @@ public class UserService {
 
         return convertToResponseDTO(user);
     }
+    public UserResponseDTO getUserByAuthUserId(
+            Long authUserId) {
+
+        User user = userRepository
+                .findByAuthUserId(authUserId)
+                .orElseThrow(() ->
+                        new ResourceNotFoundException(
+                                "User Not Found"));
+
+        return convertToResponseDTO(user);
+    }
 
     // ================= UPDATE USER =================
-    public UserResponseDTO updateUser(Long id,
-                                      UserRequestDTO updatedUser) {
+    public UserResponseDTO updateUser(
+            Long id,
+            UpdateUserDTO updatedUser) {
 
         User existingUser = userRepository.findById(id)
                 .orElseThrow(() ->
                         new ResourceNotFoundException("User Not Found"));
 
         existingUser.setName(updatedUser.getName());
-        existingUser.setEmail(updatedUser.getEmail());
-        existingUser.setPassword(updatedUser.getPassword());
-        existingUser.setRole(updatedUser.getRole());
+
+
 
         // ================= STUDENT FIELDS =================
         existingUser.setCgpa(updatedUser.getCgpa());
