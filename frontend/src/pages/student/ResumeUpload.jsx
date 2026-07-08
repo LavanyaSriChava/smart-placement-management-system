@@ -1,3 +1,4 @@
+import { useLocation } from "react-router-dom";
 import { jwtDecode } from "jwt-decode";
 import { useEffect, useState } from "react";
 import {
@@ -13,6 +14,10 @@ import {
 } from "react-icons/fa";
 
 function ResumeUpload() {
+  const location = useLocation();
+
+  const { companyId, companyName } = location.state || {};
+
   const [file, setFile] = useState(null);
   const [resume, setResume] = useState(null);
 
@@ -47,7 +52,10 @@ function ResumeUpload() {
 
     try {
       const response =
-        await uploadResume(file);
+        await uploadResume(
+          file,
+          companyId
+        );
 
       console.log(response.data);
 
@@ -86,6 +94,22 @@ function ResumeUpload() {
           Upload your latest resume
         </p>
       </div>
+
+      {companyId && (
+        <div className="bg-blue-50 border border-blue-200 rounded-2xl p-5 mb-8">
+          <h2 className="text-xl font-semibold text-slate-800">
+            Resume Analysis For
+          </h2>
+
+          <p className="mt-2">
+            <strong>Company:</strong> {companyName}
+          </p>
+
+          <p>
+            <strong>Company ID:</strong> {companyId}
+          </p>
+        </div>
+      )}
 
       {/* Resume Status Card */}
       <div className="bg-white rounded-3xl shadow-md p-8 mb-8">

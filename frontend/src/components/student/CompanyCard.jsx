@@ -1,5 +1,6 @@
 import { toast } from "react-toastify";
 import { useState } from "react";
+import { useNavigate } from "react-router-dom";
 import ConfirmationModal from "../common/ConfirmationModal";
 import { jwtDecode } from "jwt-decode";
 import { applyToCompany } from "../../api/studentapplicationApi";
@@ -7,6 +8,7 @@ import { applyToCompany } from "../../api/studentapplicationApi";
 function CompanyCard({ company, alreadyApplied }) {
 
   const [showModal, setShowModal] = useState(false);
+  const navigate = useNavigate();
 
   const handleApply = async () => {
     if (alreadyApplied) return;
@@ -74,17 +76,35 @@ function CompanyCard({ company, alreadyApplied }) {
         {company.requiredSkills}
       </p>
 
-      <button
-        onClick={() => setShowModal(true)}
-        disabled={alreadyApplied}
-        className={`mt-4 w-full p-2 rounded text-white transition ${alreadyApplied
-          ? "bg-gray-400 cursor-not-allowed"
-          : "bg-green-600 hover:bg-green-700"
-          }`}
-      >
-        {alreadyApplied ? "Applied" : "Apply"}
-      </button>
-      
+      <div className="mt-4 space-y-2">
+
+        <button
+          onClick={() =>
+            navigate("/ResumeUpload", {
+              state: {
+                companyId: company.id,
+                companyName: company.companyName,
+              },
+            })
+          }
+          className="w-full bg-blue-600 hover:bg-blue-700 text-white p-2 rounded transition"
+        >
+          Analyze Resume
+        </button>
+
+        <button
+          onClick={() => setShowModal(true)}
+          disabled={alreadyApplied}
+          className={`w-full p-2 rounded text-white transition ${alreadyApplied
+              ? "bg-gray-400 cursor-not-allowed"
+              : "bg-green-600 hover:bg-green-700"
+            }`}
+        >
+          {alreadyApplied ? "Applied" : "Apply"}
+        </button>
+
+      </div>
+
       <ConfirmationModal
         isOpen={showModal}
         title="Confirm Application"

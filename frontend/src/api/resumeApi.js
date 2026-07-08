@@ -7,13 +7,21 @@ const NODE_API =
 const SPRING_API =
   "http://localhost:8080/api/resumes";
 
-export const uploadResume = async (file) => {
+export const uploadResume = async (
+  file,
+  companyId
+) => {
 
   const formData = new FormData();
 
   formData.append(
     "resume",
     file
+  );
+
+  formData.append(
+    "companyId",
+    companyId
   );
 
   return axios.post(
@@ -36,4 +44,4 @@ export const getResumeByStudentId =
       `${SPRING_API}/student/${studentId}`
     );
 
-};
+  };
