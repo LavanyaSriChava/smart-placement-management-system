@@ -42,4 +42,8 @@ public class Company {
     // ================= REQUIRED SKILLS =================
     @NotBlank(message = "Required skills are required")
     private String requiredSkills;
+    // ================= JOB DESCRIPTION =================
+    @Column(columnDefinition = "TEXT")
+    @NotBlank(message = "Job description is required")
+    private String jobDescription;
 }
