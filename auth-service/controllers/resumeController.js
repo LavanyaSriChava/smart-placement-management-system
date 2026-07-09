@@ -57,8 +57,7 @@ exports.uploadResume = async (req, res) => {
             resumeRecord: springResponse.data
         });
 
-<<<<<<< HEAD
-=======
+
         
 console.log("5. Sending resume to FastAPI...");
 
@@ -123,7 +122,7 @@ res.status(200).json({
     resumeRecord: springResponse.data,
     analysis: analysisResponse.data
 });
->>>>>>> dcb00ea (Resume AI integration progress)
+
     } catch (error) {
 
         console.log(error);
