@@ -48,7 +48,9 @@ public class CompanyService {
         existingCompany.setAllowedBacklogs(updatedCompany.getAllowedBacklogs());
         existingCompany.setEligibleBranches(updatedCompany.getEligibleBranches());
         existingCompany.setRequiredSkills(updatedCompany.getRequiredSkills());
-
+        existingCompany.setJobDescription(
+                updatedCompany.getJobDescription()
+        );
         return companyRepository.save(existingCompany);
     }
 

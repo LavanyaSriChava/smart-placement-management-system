@@ -1,0 +1,16 @@
+<svg width="1200" height="630" viewBox="0 0 1200 630" fill="none" xmlns="http://www.w3.org/2000/svg">
+  <rect width="1200" height="630" fill="#04111F"/>
+  <circle cx="188" cy="132" r="220" fill="#123B63" fill-opacity="0.7"/>
+  <circle cx="984" cy="506" r="260" fill="#0A745B" fill-opacity="0.5"/>
+  <rect x="72" y="72" width="1056" height="486" rx="32" fill="url(#paint0_linear)" fill-opacity="0.5" stroke="#DDEAF324"/>
+  <text x="116" y="228" fill="#7BF4E2" font-family="Arial, sans-serif" font-size="28" letter-spacing="4">RECRUITER PORTFOLIO</text>
+  <text x="116" y="314" fill="#F5FBFF" font-family="Arial, sans-serif" font-size="68" font-weight="700">Chava Lavanya Sri</text>
+  <text x="116" y="382" fill="#B8C9D7" font-family="Arial, sans-serif" font-size="30">Full Stack Developer | Java &amp; Spring Boot Developer | AI-Integrated Application Developer</text>
+  <text x="116" y="454" fill="#DDEAF3" font-family="Arial, sans-serif" font-size="26">Scalable software systems. Intelligent product experiences. Recruiter-ready storytelling.</text>
+  <defs>
+    <linearGradient id="paint0_linear" x1="72" y1="72" x2="1094" y2="546" gradientUnits="userSpaceOnUse">
+      <stop stop-color="#0A1523"/>
+      <stop offset="1" stop-color="#0D2238"/>
+    </linearGradient>
+  </defs>
+</svg>
