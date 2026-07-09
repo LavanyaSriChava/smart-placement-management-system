@@ -18,6 +18,7 @@ export default function Companies() {
   const [showAddModal, setShowAddModal] =
     useState(false);
 
+ 
   const [newCompany, setNewCompany] =
     useState({
       companyName: "",
@@ -29,6 +30,7 @@ export default function Companies() {
       requiredSkills: "",
       jobDescription: "",
     });
+
 
   useEffect(() => {
     getCompanies()
@@ -96,15 +98,16 @@ export default function Companies() {
       ]);
 
       setNewCompany({
-        companyName: "",
-        role: "",
-        ctc: 0,
-        requiredCgpa: 0,
-        allowedBacklogs: 0,
-        eligibleBranches: "",
-        requiredSkills: "",
-        jobDescription: "",
-      });
+
+  companyName: "",
+  role: "",
+  ctc: 0,
+  requiredCgpa: 0,
+  allowedBacklogs: 0,
+  eligibleBranches: "",
+  requiredSkills: "",
+  jobDescription: "",
+});
 
       setShowAddModal(false);
     } catch (error) {
@@ -227,19 +230,18 @@ export default function Companies() {
               }
             />
 
-            <textarea
-              className="border p-2 w-full mb-4 rounded"
-              placeholder="Job Description"
-              value={newCompany.jobDescription}
-              onChange={(e) =>
-                setNewCompany({
-                  ...newCompany,
-                  jobDescription: e.target.value,
-                })
-              }
-              required
-              rows={5}
-            />
+           <textarea
+  placeholder="Job Description"
+  className="border p-2 w-full mb-3 rounded"
+  rows={5}
+  value={newCompany.jobDescription}
+  onChange={(e) =>
+    setNewCompany({
+      ...newCompany,
+      jobDescription: e.target.value,
+    })
+  }
+/>
 
             <div className="flex justify-end gap-2">
               <button
@@ -329,7 +331,55 @@ export default function Companies() {
                 })
               }
             />
+            <input
+  type="number"
+  className="border p-2 w-full mb-3 rounded"
+  placeholder="Allowed Backlogs"
+  value={editingCompany.allowedBacklogs || ""}
+  onChange={(e) =>
+    setEditingCompany({
+      ...editingCompany,
+      allowedBacklogs: Number(e.target.value),
+    })
+  }
+/>
 
+<input
+  className="border p-2 w-full mb-3 rounded"
+  placeholder="Eligible Branches"
+  value={editingCompany.eligibleBranches || ""}
+  onChange={(e) =>
+    setEditingCompany({
+      ...editingCompany,
+      eligibleBranches: e.target.value,
+    })
+  }
+/>
+
+<input
+  className="border p-2 w-full mb-3 rounded"
+  placeholder="Required Skills"
+  value={editingCompany.requiredSkills || ""}
+  onChange={(e) =>
+    setEditingCompany({
+      ...editingCompany,
+      requiredSkills: e.target.value,
+    })
+  }
+/>
+
+<textarea
+  className="border p-2 w-full mb-4 rounded"
+  placeholder="Job Description"
+  rows={5}
+  value={editingCompany.jobDescription || ""}
+  onChange={(e) =>
+    setEditingCompany({
+      ...editingCompany,
+      jobDescription: e.target.value,
+    })
+  }
+/>
             <div className="flex justify-end gap-2">
               <button
                 onClick={() =>
