@@ -19,6 +19,8 @@ public class Resume {
     @NotNull(message = "Student ID is required")
     private Long studentId;
 
+
+
     // ================= RESUME URL =================
     @NotBlank(message = "Resume URL is required")
     private String resumeUrl;
@@ -29,4 +31,6 @@ public class Resume {
 
     // ================= UPLOADED AT =================
     private LocalDateTime uploadedAt;
+
+
 }
