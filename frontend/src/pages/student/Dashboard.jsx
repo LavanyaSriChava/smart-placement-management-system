@@ -1,3 +1,4 @@
+import { getResumeByStudentId } from "../../api/resumeApi";
 import { getCompanies } from "../../api/studentCompanyApi";
 import { jwtDecode } from "jwt-decode";
 import { useEffect, useState } from "react";
@@ -27,11 +28,14 @@ function Dashboard() {
 
   const [eligibleCount, setEligibleCount] = useState(0);
 
+  const [resumeUploaded, setResumeUploaded] = useState(false);
+
   useEffect(() => {
 
     fetchStudent();
     fetchApplications();
     fetchCompanies();
+    fetchResumeStatus();
 
   }, []);
 
@@ -93,30 +97,30 @@ function Dashboard() {
 
   const fetchCompanies = async () => {
 
-  try {
+    try {
 
-    const response = await getCompanies();
+      const response = await getCompanies();
 
-    console.log("Response:", response);
-    console.log("Response Data:", response.data);
+      console.log("Response:", response);
+      console.log("Response Data:", response.data);
 
-    const companies = response.data;
+      const companies = response.data;
 
-    const map = {};
+      const map = {};
 
-    companies.forEach((company) => {
-      map[company.id] = company.companyName;
-    });
+      companies.forEach((company) => {
+        map[company.id] = company.companyName;
+      });
 
-    setCompanyMap(map);
+      setCompanyMap(map);
 
-  } catch (error) {
+    } catch (error) {
 
-    console.error(error);
+      console.error(error);
 
-  }
+    }
 
-};
+  };
 
   const calculateEligibility = async (studentData) => {
 
@@ -174,6 +178,26 @@ function Dashboard() {
 
       default:
         return "bg-yellow-100 text-yellow-700";
+    }
+  };
+
+  const fetchResumeStatus = async () => {
+    try {
+      const token = localStorage.getItem("token");
+      const user = jwtDecode(token);
+
+      await getResumeByStudentId(user.id);
+
+      setResumeUploaded(true);
+
+    } catch (error) {
+
+      if (error.response?.status === 404) {
+        setResumeUploaded(false);
+      } else {
+        console.error(error);
+      }
+
     }
   };
 
@@ -247,7 +271,10 @@ function Dashboard() {
 
         <StatCard
           title="Resume Status"
-          value="Uploaded"
+          value={resumeUploaded ? "Uploaded" : "Not Uploaded"}
+          valueClassName={
+            resumeUploaded ? "text-green-600" : "text-red-600"
+          }
           icon={<FaFileAlt />}
         />
 
@@ -299,23 +326,7 @@ function Dashboard() {
 
       </div>
 
-      {/* Resume Information */}
-
-      <div className="bg-white p-6 rounded-2xl shadow-md">
-
-        <h2 className="text-2xl font-semibold mb-4">
-          Resume Information
-        </h2>
-
-        <p>
-          <strong>File Name:</strong> Resume.pdf
-        </p>
-
-        <p className="mt-2">
-          <strong>Status:</strong> Uploaded
-        </p>
-
-      </div>
+      
 
     </div >
   );

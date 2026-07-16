@@ -42,9 +42,10 @@ function Applications() {
             user.id
           );
 
-        console.log(
-          "Applications:",
-          response.data
+        console.log("Applications:", response.data);
+
+        response.data.forEach(app =>
+          console.log(app.companyId, app.status)
         );
 
         setApplications(
@@ -90,26 +91,18 @@ function Applications() {
 
   };
 
-  const shortlistedCount =
-    applications.filter(
-      (app) =>
-        app.status ===
-        "SHORTLISTED"
-    ).length;
+  const shortlistedCount = applications.filter(
+    app => app.status?.toUpperCase() === "SHORTLISTED"
+  ).length;
 
-  const pendingCount =
-    applications.filter(
-      (app) =>
-        app.status ===
-        "PENDING"
-    ).length;
+  const pendingCount = applications.filter(
+    app => app.status?.toUpperCase() === "PENDING"
+  ).length;
 
-  const rejectedCount =
-    applications.filter(
-      (app) =>
-        app.status ===
-        "REJECTED"
-    ).length;
+  const rejectedCount = applications.filter(
+    app => app.status?.toUpperCase() === "REJECTED"
+  ).length;
+
 
   return (
     <div className="min-h-screen bg-gray-100 p-6 md:p-8">
@@ -242,15 +235,13 @@ function Applications() {
 
                       <div className="w-12 h-12 rounded-full bg-blue-100 flex items-center justify-center">
 
-                        {status ===
-                          "SHORTLISTED" ? (
+                        {status?.toUpperCase() === "SHORTLISTED" ? (
 
                           <FaCheckCircle
                             className="text-green-600"
                           />
 
-                        ) : status ===
-                          "REJECTED" ? (
+                        ) : status?.toUpperCase() === "REJECTED" ? (
 
                           <FaTimesCircle
                             className="text-red-600"
