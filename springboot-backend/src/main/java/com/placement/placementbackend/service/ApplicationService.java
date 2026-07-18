@@ -30,8 +30,9 @@ public class ApplicationService {
     private RestTemplate restTemplate;
 
     // Notification Service URL
+
     private static final String NOTIFICATION_URL =
-            "https://ovary-armless-distill.ngrok-free.dev/api/notifications";
+            "http://localhost:5000/api/notifications";
 
     // ================= APPLY TO COMPANY =================
     public Application applyCompany(Application application) {
