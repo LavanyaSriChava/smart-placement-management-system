@@ -11,7 +11,8 @@ export default function Companies() {
   const [companies, setCompanies] = useState([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState("");
-
+const [search, setSearch] = useState("");
+const [branchFilter, setBranchFilter] = useState("ALL");
   const [editingCompany, setEditingCompany] =
     useState(null);
 
@@ -131,7 +132,20 @@ export default function Companies() {
       </div>
     );
   }
+const filteredCompanies = companies.filter((company) => {
+  const matchesSearch =
+    company.companyName
+      ?.toLowerCase()
+      .includes(search.toLowerCase());
 
+  const matchesBranch =
+    branchFilter === "ALL" ||
+    company.eligibleBranches
+      ?.toLowerCase()
+      .includes(branchFilter.toLowerCase());
+
+  return matchesSearch && matchesBranch;
+});
   return (
     <>
       {/* Add Company Modal */}
@@ -415,12 +429,44 @@ export default function Companies() {
           + Add Company
         </button>
       </div>
+<div className="bg-white rounded-xl shadow p-4 mb-6">
+  <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
 
-      <CompanyTable
-        companies={companies}
-        onDelete={handleDelete}
-        onEdit={handleEdit}
-      />
+    <input
+      type="text"
+      placeholder="Search company..."
+      value={search}
+      onChange={(e) => setSearch(e.target.value)}
+      className="border rounded-lg px-4 py-2"
+    />
+
+    <select
+      value={branchFilter}
+      onChange={(e) => setBranchFilter(e.target.value)}
+      className="border rounded-lg px-4 py-2"
+    >
+      <option value="ALL">All Branches</option>
+      <option value="CSE">CSE</option>
+      <option value="ECE">ECE</option>
+      <option value="EEE">EEE</option>
+      <option value="MECH">MECH</option>
+      <option value="CIVIL">CIVIL</option>
+    </select>
+
+    <button
+      onClick={() => setShowAddModal(true)}
+      className="bg-green-600 hover:bg-green-700 text-white rounded-lg px-4 py-2"
+    >
+      + Add Company
+    </button>
+
+  </div>
+</div>
+     <CompanyTable
+  companies={filteredCompanies}
+  onDelete={handleDelete}
+  onEdit={handleEdit}
+/>
     </>
   );
 }
