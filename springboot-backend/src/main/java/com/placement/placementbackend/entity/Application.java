@@ -24,7 +24,7 @@ public class Application {
     private Long companyId;
 
     // ================= STATUS =================
-    @NotBlank(message = "Status is required")
+
     private String status;
 
     // ================= APPLIED AT =================
