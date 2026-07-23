@@ -6,15 +6,14 @@ exports.register = async (req, res) => {
     try {
 
         const {
-            name,
-            email,
-            password,
-            role,
-            cgpa,
-            branch,
-            backlogs,
-            skills
-        } = req.body;
+    name,
+    email,
+    password,
+    cgpa,
+    branch,
+    backlogs,
+    skills
+} = req.body;
 
         const existingUser = await pool.query(
             "SELECT * FROM users WHERE email = $1",
@@ -102,9 +101,10 @@ exports.login = async (req, res) => {
         );
 
         res.json({
-            message: "Login Successful",
-            token
-        });
+    message: "Login Successful",
+    token,
+    role: user.role
+});
 
     } catch (error) {
 
