@@ -19,7 +19,7 @@ export default function useDashboardStats() {
     ])
       .then(([users, companies, applications]) => {
         const placedCount = applications.filter(
-          (app) => app.status === "PLACED"
+          (app) => app.status === "Placed"
         ).length;
 
         setStats({
