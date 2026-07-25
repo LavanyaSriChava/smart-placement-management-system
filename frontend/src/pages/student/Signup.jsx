@@ -6,7 +6,6 @@ function Signup() {
   const [name, setName] = useState("");
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
-  const [role, setRole] = useState("STUDENT");
   const [cgpa, setCgpa] = useState("");
   const [branch, setBranch] = useState("");
   const [backlogs, setBacklogs] = useState("");
@@ -20,7 +19,7 @@ function Signup() {
         name,
         email,
         password,
-        role,
+        role: "STUDENT",
         cgpa,
         branch,
         backlogs,
@@ -120,33 +119,7 @@ function Signup() {
             "
           />
 
-          <select
-            value={role}
-            onChange={(e) =>
-              setRole(e.target.value)
-            }
-            className="
-              border
-              rounded-xl
-              px-4
-              py-3
-              focus:outline-none
-              focus:ring-2
-              focus:ring-indigo-500
-            "
-          >
-            <option value="STUDENT">
-              Student
-            </option>
 
-            <option value="ADMIN">
-              Admin
-            </option>
-
-            <option value="RECRUITER">
-              Recruiter
-            </option>
-          </select>
 
           <input
             type="number"

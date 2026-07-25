@@ -27,20 +27,17 @@ function ResumeUpload() {
 
   const fetchResume = async () => {
     try {
-      const token =
-        localStorage.getItem("token");
+      const token = localStorage.getItem("token");
 
-      const user =
-        jwtDecode(token);
+      const user = jwtDecode(token);
 
-      const response =
-        await getResumeByStudentId(user.id);
+      console.log("Decoded JWT:", user);   // <-- Add this line
+
+      const response = await getResumeByStudentId(user.id);
 
       setResume(response.data);
     } catch (error) {
-      console.log(
-        "No resume found yet"
-      );
+      console.log("No resume found yet");
     }
   };
 
