@@ -7,35 +7,27 @@ const NODE_API =
 const SPRING_API =
   "http://localhost:8080/api/resumes";
 
-export const uploadResume = async (
-  file,
-  companyId
-) => {
+export const uploadResume = async (file, companyId) => {
 
   const formData = new FormData();
 
-  formData.append(
-    "resume",
-    file
-  );
+  formData.append("resume", file);
+  formData.append("companyId", companyId);
 
-  formData.append(
-    "companyId",
-    companyId
-  );
+  const token = localStorage.getItem("token");
 
   return axios.post(
     `${NODE_API}/resume`,
     formData,
     {
       headers: {
-        "Content-Type":
-          "multipart/form-data",
+        "Content-Type": "multipart/form-data",
+        Authorization: `Bearer ${token}`,
       },
     }
   );
-
 };
+
 
 export const getResumeByStudentId =
   async (studentId) => {

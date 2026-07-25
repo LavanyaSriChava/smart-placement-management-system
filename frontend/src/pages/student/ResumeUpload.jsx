@@ -20,6 +20,7 @@ function ResumeUpload() {
 
   const [file, setFile] = useState(null);
   const [resume, setResume] = useState(null);
+  const [analysis, setAnalysis] = useState(null);
 
   useEffect(() => {
     fetchResume();
@@ -56,13 +57,16 @@ function ResumeUpload() {
 
       console.log(response.data);
 
-      alert(
-        "Resume Uploaded Successfully"
-      );
+      setAnalysis(response.data.analysis);
+
+      console.log("Analysis:", response.data.analysis);
+
+      alert("Resume Uploaded Successfully");
 
       setFile(null);
 
       fetchResume();
+
     } catch (error) {
       console.error("Full Error:", error);
 
@@ -135,19 +139,60 @@ function ResumeUpload() {
                   </span>
                 </div>
 
-                <a
-                  href={resume.resumeUrl}
-                  target="_blank"
-                  rel="noreferrer"
-                  className="inline-block mt-4 text-blue-600 hover:text-blue-700 font-medium"
-                >
-                  View Resume →
-                </a>
+                {resume && (
+                  <a
+                    href={resume.resumeUrl}
+                    target="_blank"
+                    rel="noreferrer"
+                    className="inline-block mt-4 text-blue-600 hover:text-blue-700 font-medium"
+                  >
+                    View Resume →
+                  </a>
+                )}
+
               </>
             ) : (
               <p className="mt-3 text-gray-500">
                 No Resume Uploaded Yet
               </p>
+            )}
+
+            {analysis && (
+              <div className="mt-6 border-t pt-5">
+
+                <h3 className="text-xl font-semibold text-slate-800 mb-4">
+                  AI Resume Analysis
+                </h3>
+
+                <div className="space-y-3">
+
+                  <div>
+                    <span className="font-semibold">
+                      ATS Score:
+                    </span>{" "}
+                    {analysis["Matching Score"]}%
+                  </div>
+
+                  <div>
+                    <span className="font-semibold">
+                      Assessment:
+                    </span>{" "}
+                    {analysis.Assessment}
+                  </div>
+
+                  <div>
+                    <span className="font-semibold block mb-2">
+                      AI Suggestions:
+                    </span>
+
+                    <pre className="bg-gray-100 p-4 rounded-lg whitespace-pre-wrap text-sm">
+                      {analysis.Suggestions}
+                    </pre>
+                  </div>
+
+                </div>
+
+              </div>
             )}
 
           </div>
