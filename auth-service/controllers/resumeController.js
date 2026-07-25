@@ -50,14 +50,15 @@ exports.uploadResume = async (req, res) => {
         const result = await uploadFromBuffer();
 
         console.log("2. Cloudinary upload completed.");
-
+        console.log("JWT Payload:", req.user);
+console.log("Student ID being sent:", req.user.id);
         // Save metadata in Spring Boot
         const resumeData = {
             studentId: req.user.id,   // Use authenticated user's ID
             fileName: req.file.originalname,
             resumeUrl: result.secure_url
         };
-
+console.log("Resume Data:", resumeData);
         console.log("3. Saving resume metadata...");
 
         const springResponse = await axios.post(
