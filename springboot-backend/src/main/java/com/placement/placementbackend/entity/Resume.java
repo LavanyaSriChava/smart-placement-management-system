@@ -17,8 +17,8 @@ public class Resume {
 
     // ================= STUDENT ID =================
     @NotNull(message = "Student ID is required")
+    @Column(unique = true, nullable = false)
     private Long studentId;
-
 
 
     // ================= RESUME URL =================
