@@ -16,11 +16,29 @@ public class ResumeService {
     private ResumeRepository resumeRepository;
 
     // ================= ADD RESUME =================
+    // ================= ADD / REPLACE RESUME =================
     public Resume addResume(Resume resume) {
 
-        resume.setUploadedAt(LocalDateTime.now());
+        Resume resumeToSave = resumeRepository
+                .findByStudentId(resume.getStudentId())
+                .map(existingResume -> {
 
-        return resumeRepository.save(resume);
+                    // Replace the old resume details
+                    existingResume.setResumeUrl(resume.getResumeUrl());
+                    existingResume.setFileName(resume.getFileName());
+                    existingResume.setUploadedAt(LocalDateTime.now());
+
+                    return existingResume;
+                })
+                .orElseGet(() -> {
+
+                    // First resume uploaded by this student
+                    resume.setUploadedAt(LocalDateTime.now());
+
+                    return resume;
+                });
+
+        return resumeRepository.save(resumeToSave);
     }
 
     // ================= GET ALL RESUMES =================
