@@ -16,7 +16,21 @@ public class ResumeService {
     private ResumeRepository resumeRepository;
 
     // ================= ADD RESUME =================
+    // ================= ADD / REPLACE RESUME =================
     public Resume addResume(Resume resume) {
+
+        Resume existingResume = resumeRepository
+                .findByStudentId(resume.getStudentId())
+                .orElse(null);
+
+        if (existingResume != null) {
+
+            existingResume.setResumeUrl(resume.getResumeUrl());
+            existingResume.setFileName(resume.getFileName());
+            existingResume.setUploadedAt(LocalDateTime.now());
+
+            return resumeRepository.save(existingResume);
+        }
 
         resume.setUploadedAt(LocalDateTime.now());
 

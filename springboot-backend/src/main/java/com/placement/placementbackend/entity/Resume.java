@@ -15,8 +15,8 @@ public class Resume {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    // ================= STUDENT ID =================
     @NotNull(message = "Student ID is required")
+    @Column(unique = true, nullable = false)
     private Long studentId;
 
 
