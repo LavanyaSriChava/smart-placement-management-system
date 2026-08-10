@@ -99,6 +99,8 @@ console.log("Resume Data:", resumeData);
         const companyResponse = await axios.get(
             `http://localhost:8080/api/companies/${companyId}`
         );
+        console.log("Company Response:", companyResponse.data);
+console.log("Job Description:", companyResponse.data.jobDescription);
 
         console.log("8. Company fetched.");
 
@@ -108,7 +110,10 @@ console.log("Resume Data:", resumeData);
         console.log(jobDescription);
 
         console.log("9. Calling AI analysis...");
-
+console.log("Sending to AI:", {
+    resume_text: resumeText.substring(0, 100) + "...",
+    job_description: jobDescription
+});
         const analysisResponse = await axios.post(
             `${process.env.FASTAPI_URL}/analyze`,
             {
