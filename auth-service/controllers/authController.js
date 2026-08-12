@@ -37,7 +37,7 @@ exports.register = async (req, res) => {
                 name,
                 email,
                 hashedPassword,
-                role,
+                "STUDENT",
                 cgpa,
                 branch,
                 backlogs,
