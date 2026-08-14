@@ -430,7 +430,7 @@ const filteredCompanies = companies.filter((company) => {
         </button>
       </div>
 <div className="bg-white rounded-xl shadow p-4 mb-6">
-  <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
+   <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
 
     <input
       type="text"
@@ -453,12 +453,7 @@ const filteredCompanies = companies.filter((company) => {
       <option value="CIVIL">CIVIL</option>
     </select>
 
-    <button
-      onClick={() => setShowAddModal(true)}
-      className="bg-green-600 hover:bg-green-700 text-white rounded-lg px-4 py-2"
-    >
-      + Add Company
-    </button>
+    
 
   </div>
 </div>
