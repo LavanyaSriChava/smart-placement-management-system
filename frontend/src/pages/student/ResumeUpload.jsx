@@ -1,4 +1,4 @@
-import { useLocation } from "react-router-dom";
+import { useLocation, useNavigate } from "react-router-dom";
 import { jwtDecode } from "jwt-decode";
 import { useEffect, useState } from "react";
 import {
@@ -15,6 +15,8 @@ import {
 
 function ResumeUpload() {
   const location = useLocation();
+  const navigate = useNavigate();
+
 
   const { companyId, companyName } = location.state || {};
 
@@ -23,8 +25,16 @@ function ResumeUpload() {
   const [analysis, setAnalysis] = useState(null);
 
   useEffect(() => {
-    fetchResume();
-  }, []);
+    if (!companyId) {
+      navigate("/companies", { replace: true });
+    }
+  }, [companyId, navigate]);
+
+  useEffect(() => {
+    if (companyId) {
+      fetchResume();
+    }
+  }, [companyId]);
 
   const fetchResume = async () => {
     try {
@@ -43,10 +53,16 @@ function ResumeUpload() {
   };
 
   const handleUpload = async () => {
-    if (!file) {
-      alert("Please select a file");
-      return;
-    }
+  if (!companyId) {
+    alert("Please select a company first from the Companies page.");
+    navigate("/companies");
+    return;
+  }
+
+  if (!file) {
+    alert("Please select a file");
+    return;
+  }
 
     try {
       const response =
@@ -168,7 +184,7 @@ function ResumeUpload() {
 
                   <div>
                     <span className="font-semibold">
-                      ATS Score:
+                      Matching Score:
                     </span>{" "}
                     {analysis["Matching Score"]}%
                   </div>

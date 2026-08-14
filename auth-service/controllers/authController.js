@@ -30,7 +30,7 @@ exports.register = async (req, res) => {
 
         const hashedPassword =
             await bcrypt.hash(password, 10);
- HEAD
+ 
         const result = await pool.query(
     `INSERT INTO users
     (name,email,password,role,cgpa,branch,backlogs,skills)

@@ -1,8 +1,10 @@
 import { useState } from "react";
 import { registerUser } from "../../api/authApi";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 
 function Signup() {
+  const navigate = useNavigate();
+
   const [name, setName] = useState("");
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
@@ -11,26 +13,69 @@ function Signup() {
   const [backlogs, setBacklogs] = useState("");
   const [skills, setSkills] = useState("");
 
+  const [message, setMessage] = useState("");
+  const [messageType, setMessageType] = useState("");
+  const [loading, setLoading] = useState(false);
+
   const handleSubmit = async (e) => {
     e.preventDefault();
+
+    setMessage("");
+    setMessageType("");
+    setLoading(true);
 
     try {
       const response = await registerUser({
         name,
         email,
         password,
-        role: "STUDENT",
         cgpa,
         branch,
         backlogs,
-        skills,
+        skills
       });
 
-      console.log(response.data);
+      // Registration successful
+      setMessage(
+        response.data.message || "Account created successfully!"
+      );
+      setMessageType("success");
+
+      console.log("Signup successful:", response.data);
+
+      // Redirect to login after showing success message
+      setTimeout(() => {
+        navigate("/login");
+      }, 1500);
+
     } catch (error) {
-      console.log("ERROR RESPONSE:");
-      console.log(error.response);
-      console.log(error.response?.data);
+      console.error("Signup Error:", error);
+
+      const status = error.response?.status;
+      const backendMessage = error.response?.data?.message;
+
+      if (status === 400) {
+        setMessage(
+          backendMessage || "Invalid registration details."
+        );
+      } else if (status === 500) {
+        setMessage(
+          "Server error. Please try again later."
+        );
+      } else if (!error.response) {
+        setMessage(
+          "Unable to connect to the server. Please check whether the backend is running."
+        );
+      } else {
+        setMessage(
+          backendMessage || "Registration failed. Please try again."
+        );
+      }
+
+      setMessageType("error");
+
+    } finally {
+      setLoading(false);
     }
   };
 
@@ -62,16 +107,31 @@ function Signup() {
 
         </div>
 
+
+        {/* Success / Error Message */}
+        {message && (
+          <div
+            className={`mb-5 p-4 rounded-xl text-center font-medium ${
+              messageType === "success"
+                ? "bg-green-100 text-green-700 border border-green-300"
+                : "bg-red-100 text-red-700 border border-red-300"
+            }`}
+          >
+            {message}
+          </div>
+        )}
+
+
         {/* Form Grid */}
         <div className="grid md:grid-cols-2 gap-4">
 
+          {/* Name */}
           <input
             type="text"
             placeholder="Full Name"
             value={name}
-            onChange={(e) =>
-              setName(e.target.value)
-            }
+            onChange={(e) => setName(e.target.value)}
+            required
             className="
               border
               rounded-xl
@@ -83,13 +143,14 @@ function Signup() {
             "
           />
 
+
+          {/* Email */}
           <input
             type="email"
             placeholder="Email Address"
             value={email}
-            onChange={(e) =>
-              setEmail(e.target.value)
-            }
+            onChange={(e) => setEmail(e.target.value)}
+            required
             className="
               border
               rounded-xl
@@ -101,13 +162,14 @@ function Signup() {
             "
           />
 
+
+          {/* Password */}
           <input
             type="password"
             placeholder="Password"
             value={password}
-            onChange={(e) =>
-              setPassword(e.target.value)
-            }
+            onChange={(e) => setPassword(e.target.value)}
+            required
             className="
               border
               rounded-xl
@@ -120,14 +182,14 @@ function Signup() {
           />
 
 
-
+          {/* CGPA */}
           <input
             type="number"
+            step="0.01"
             placeholder="CGPA"
             value={cgpa}
-            onChange={(e) =>
-              setCgpa(e.target.value)
-            }
+            onChange={(e) => setCgpa(e.target.value)}
+            required
             className="
               border
               rounded-xl
@@ -139,13 +201,14 @@ function Signup() {
             "
           />
 
+
+          {/* Branch */}
           <input
             type="text"
             placeholder="Branch"
             value={branch}
-            onChange={(e) =>
-              setBranch(e.target.value)
-            }
+            onChange={(e) => setBranch(e.target.value)}
+            required
             className="
               border
               rounded-xl
@@ -157,13 +220,15 @@ function Signup() {
             "
           />
 
+
+          {/* Backlogs */}
           <input
             type="number"
             placeholder="Backlogs"
             value={backlogs}
-            onChange={(e) =>
-              setBacklogs(e.target.value)
-            }
+            onChange={(e) => setBacklogs(e.target.value)}
+            required
+            min="0"
             className="
               border
               rounded-xl
@@ -175,13 +240,14 @@ function Signup() {
             "
           />
 
+
+          {/* Skills */}
           <input
             type="text"
             placeholder="Skills (Java, React, SQL)"
             value={skills}
-            onChange={(e) =>
-              setSkills(e.target.value)
-            }
+            onChange={(e) => setSkills(e.target.value)}
+            required
             className="
               border
               rounded-xl
@@ -195,13 +261,17 @@ function Signup() {
 
         </div>
 
+
         {/* Signup Button */}
         <button
           type="submit"
+          disabled={loading}
           className="
             w-full
             bg-indigo-600
             hover:bg-indigo-700
+            disabled:bg-gray-400
+            disabled:cursor-not-allowed
             text-white
             py-3
             rounded-xl
@@ -210,8 +280,9 @@ function Signup() {
             mt-6
           "
         >
-          Create Account
+          {loading ? "Creating Account..." : "Create Account"}
         </button>
+
 
         {/* Login Link */}
         <p className="text-center text-gray-500 mt-6">
