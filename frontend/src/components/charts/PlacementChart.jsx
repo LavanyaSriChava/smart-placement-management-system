@@ -8,10 +8,19 @@ import {
   XAxis,
   YAxis,
   Tooltip,
+  Cell,
+  LabelList,
 } from "recharts";
 
 export default function PlacementChart() {
   const [chartData, setChartData] = useState([]);
+
+  // Colors for each CGPA range
+  const COLORS = [
+    "#f59e0b", // 7-8 (Amber)
+    "#3b82f6", // 8-9 (Blue)
+    "#22c55e", // 9-10 (Green)
+  ];
 
   useEffect(() => {
     getUsers()
@@ -29,7 +38,7 @@ export default function PlacementChart() {
             cgpaRanges["7-8"]++;
           } else if (cgpa >= 8 && cgpa < 9) {
             cgpaRanges["8-9"]++;
-          } else if (cgpa >= 9) {
+          } else if (cgpa >= 9 && cgpa <= 10) {
             cgpaRanges["9-10"]++;
           }
         });
@@ -57,7 +66,16 @@ export default function PlacementChart() {
           <XAxis dataKey="range" />
           <YAxis />
           <Tooltip />
-          <Bar dataKey="students" />
+
+          <Bar dataKey="students" radius={[8, 8, 0, 0]}>
+            {chartData.map((entry, index) => (
+              <Cell
+                key={`cell-${index}`}
+                fill={COLORS[index % COLORS.length]}
+              />
+            ))}
+            <LabelList dataKey="students" position="top" />
+          </Bar>
         </BarChart>
       </ResponsiveContainer>
     </div>

@@ -11,13 +11,15 @@ export default function Companies() {
   const [companies, setCompanies] = useState([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState("");
-
+const [search, setSearch] = useState("");
+const [branchFilter, setBranchFilter] = useState("ALL");
   const [editingCompany, setEditingCompany] =
     useState(null);
 
   const [showAddModal, setShowAddModal] =
     useState(false);
 
+ 
   const [newCompany, setNewCompany] =
     useState({
       companyName: "",
@@ -27,7 +29,9 @@ export default function Companies() {
       allowedBacklogs: 0,
       eligibleBranches: "",
       requiredSkills: "",
+      jobDescription: "",
     });
+
 
   useEffect(() => {
     getCompanies()
@@ -53,7 +57,7 @@ export default function Companies() {
       );
     } catch (error) {
       console.error(error);
-     toast.error("Failed to delete company");
+      toast.error("Failed to delete company");
     }
   };
 
@@ -95,14 +99,16 @@ export default function Companies() {
       ]);
 
       setNewCompany({
-        companyName: "",
-        role: "",
-        ctc: 0,
-        requiredCgpa: 0,
-        allowedBacklogs: 0,
-        eligibleBranches: "",
-        requiredSkills: "",
-      });
+
+  companyName: "",
+  role: "",
+  ctc: 0,
+  requiredCgpa: 0,
+  allowedBacklogs: 0,
+  eligibleBranches: "",
+  requiredSkills: "",
+  jobDescription: "",
+});
 
       setShowAddModal(false);
     } catch (error) {
@@ -126,7 +132,20 @@ export default function Companies() {
       </div>
     );
   }
+const filteredCompanies = companies.filter((company) => {
+  const matchesSearch =
+    company.companyName
+      ?.toLowerCase()
+      .includes(search.toLowerCase());
 
+  const matchesBranch =
+    branchFilter === "ALL" ||
+    company.eligibleBranches
+      ?.toLowerCase()
+      .includes(branchFilter.toLowerCase());
+
+  return matchesSearch && matchesBranch;
+});
   return (
     <>
       {/* Add Company Modal */}
@@ -225,6 +244,19 @@ export default function Companies() {
               }
             />
 
+           <textarea
+  placeholder="Job Description"
+  className="border p-2 w-full mb-3 rounded"
+  rows={5}
+  value={newCompany.jobDescription}
+  onChange={(e) =>
+    setNewCompany({
+      ...newCompany,
+      jobDescription: e.target.value,
+    })
+  }
+/>
+
             <div className="flex justify-end gap-2">
               <button
                 onClick={() =>
@@ -313,7 +345,55 @@ export default function Companies() {
                 })
               }
             />
+            <input
+  type="number"
+  className="border p-2 w-full mb-3 rounded"
+  placeholder="Allowed Backlogs"
+  value={editingCompany.allowedBacklogs || ""}
+  onChange={(e) =>
+    setEditingCompany({
+      ...editingCompany,
+      allowedBacklogs: Number(e.target.value),
+    })
+  }
+/>
 
+<input
+  className="border p-2 w-full mb-3 rounded"
+  placeholder="Eligible Branches"
+  value={editingCompany.eligibleBranches || ""}
+  onChange={(e) =>
+    setEditingCompany({
+      ...editingCompany,
+      eligibleBranches: e.target.value,
+    })
+  }
+/>
+
+<input
+  className="border p-2 w-full mb-3 rounded"
+  placeholder="Required Skills"
+  value={editingCompany.requiredSkills || ""}
+  onChange={(e) =>
+    setEditingCompany({
+      ...editingCompany,
+      requiredSkills: e.target.value,
+    })
+  }
+/>
+
+<textarea
+  className="border p-2 w-full mb-4 rounded"
+  placeholder="Job Description"
+  rows={5}
+  value={editingCompany.jobDescription || ""}
+  onChange={(e) =>
+    setEditingCompany({
+      ...editingCompany,
+      jobDescription: e.target.value,
+    })
+  }
+/>
             <div className="flex justify-end gap-2">
               <button
                 onClick={() =>
@@ -349,12 +429,39 @@ export default function Companies() {
           + Add Company
         </button>
       </div>
+<div className="bg-white rounded-xl shadow p-4 mb-6">
+   <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
 
-      <CompanyTable
-        companies={companies}
-        onDelete={handleDelete}
-        onEdit={handleEdit}
-      />
+    <input
+      type="text"
+      placeholder="Search company..."
+      value={search}
+      onChange={(e) => setSearch(e.target.value)}
+      className="border rounded-lg px-4 py-2"
+    />
+
+    <select
+      value={branchFilter}
+      onChange={(e) => setBranchFilter(e.target.value)}
+      className="border rounded-lg px-4 py-2"
+    >
+      <option value="ALL">All Branches</option>
+      <option value="CSE">CSE</option>
+      <option value="ECE">ECE</option>
+      <option value="EEE">EEE</option>
+      <option value="MECH">MECH</option>
+      <option value="CIVIL">CIVIL</option>
+    </select>
+
+    
+
+  </div>
+</div>
+     <CompanyTable
+  companies={filteredCompanies}
+  onDelete={handleDelete}
+  onEdit={handleEdit}
+/>
     </>
   );
 }

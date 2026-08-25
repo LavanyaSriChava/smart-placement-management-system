@@ -1,16 +1,18 @@
 import { useEffect, useState } from "react";
 import { getUsers } from "../../api/userApi";
-
 import {
   ResponsiveContainer,
   PieChart,
   Pie,
   Tooltip,
   Legend,
+  Cell,
 } from "recharts";
 
 export default function BacklogsChart() {
   const [chartData, setChartData] = useState([]);
+
+  const COLORS = ["#22c55e", "#ef4444"]; // Green, Red
 
   useEffect(() => {
     getUsers()
@@ -23,32 +25,36 @@ export default function BacklogsChart() {
           (user) => user.backlogs > 0
         ).length;
 
-        setChartData([
-  {
-    name: "No Backlogs",
-    value: noBacklogs,
-  },
-  {
-    name: "Has Backlogs",
-    value: hasBacklogs,
-  },
-].filter((item) => item.value > 0));
+        setChartData(
+          [
+            {
+              name: "No Backlogs",
+              value: noBacklogs,
+            },
+            {
+              name: "Has Backlogs",
+              value: hasBacklogs,
+            },
+          ].filter((item) => item.value > 0)
+        );
       })
       .catch(console.error);
   }, []);
-if (chartData.length <= 1) {
-  return (
-    <div className="bg-white rounded-xl shadow p-4">
-      <h2 className="text-xl font-semibold mb-4">
-        Backlogs Analysis
-      </h2>
 
-      <div className="text-gray-500 text-center py-10">
-        Not enough data to visualize backlogs.
+  if (chartData.length <= 1) {
+    return (
+      <div className="bg-white rounded-xl shadow p-4">
+        <h2 className="text-xl font-semibold mb-4">
+          Backlogs Analysis
+        </h2>
+
+        <div className="text-gray-500 text-center py-10">
+          Not enough data to visualize backlogs.
+        </div>
       </div>
-    </div>
-  );
-}
+    );
+  }
+
   return (
     <div className="bg-white rounded-xl shadow p-4">
       <h2 className="text-xl font-semibold mb-4">
@@ -62,7 +68,15 @@ if (chartData.length <= 1) {
             dataKey="value"
             nameKey="name"
             outerRadius={100}
-          />
+          >
+            {chartData.map((entry, index) => (
+              <Cell
+                key={`cell-${index}`}
+                fill={COLORS[index % COLORS.length]}
+              />
+            ))}
+          </Pie>
+
           <Tooltip />
           <Legend />
         </PieChart>
