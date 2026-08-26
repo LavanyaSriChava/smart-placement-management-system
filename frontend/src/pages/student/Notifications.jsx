@@ -1,11 +1,16 @@
 import { jwtDecode } from "jwt-decode";
 import { useEffect, useState } from "react";
-import { getNotifications } from "../../api/notificationApi";
 import {
   FaBell,
   FaCheckCircle,
   FaBuilding,
 } from "react-icons/fa";
+
+import {
+  getNotifications,
+  markNotificationAsRead,
+  deleteNotification,
+} from "../../api/notificationApi";
 
 function Notifications() {
 
@@ -55,6 +60,41 @@ function Notifications() {
       }
 
     };
+
+  const handleMarkAsRead = async (notificationId) => {
+    try {
+      await markNotificationAsRead(notificationId);
+
+      // Immediately update UI
+      setNotifications((prev) =>
+        prev.map((notification) =>
+          notification.id === notificationId
+            ? { ...notification, isRead: true }
+            : notification
+        )
+      );
+
+    } catch (error) {
+      console.error("Failed to mark notification as read:", error);
+    }
+  };
+
+  const handleDelete = async (notificationId) => {
+    try {
+      await deleteNotification(notificationId);
+
+      // Immediately remove from UI
+      setNotifications((prev) =>
+        prev.filter(
+          (notification) =>
+            notification.id !== notificationId
+        )
+      );
+
+    } catch (error) {
+      console.error("Failed to delete notification:", error);
+    }
+  };
 
   return (
     <div className="min-h-screen bg-gray-100 p-6 md:p-8">
@@ -111,52 +151,97 @@ function Notifications() {
 
           <div className="space-y-4">
 
-            {notifications.map(
-              (notification) => (
+            {notifications.map((notification) => (
 
-                <div
-                  key={notification.id}
-                  className="
-                  border
-                  rounded-2xl
-                  p-5
-                  hover:shadow-md
-                  transition-all
-                  duration-300
-                  bg-gray-50
-                "
-                >
+              <div
+                key={notification.id}
+                className={`border rounded-2xl p-5 transition-all duration-300
+      ${notification.isRead
+                    ? "bg-gray-50"
+                    : "bg-blue-50 border-blue-200"
+                  }
+    `}
+              >
 
-                  <div className="flex items-start gap-4">
+                <div className="flex items-start gap-4">
 
-                    <div className="w-12 h-12 rounded-full bg-blue-100 flex items-center justify-center">
+                  {/* Icon */}
+                  <div
+                    className={`w-12 h-12 rounded-full flex items-center justify-center
+          ${notification.isRead
+                        ? "bg-gray-200"
+                        : "bg-blue-100"
+                      }
+        `}
+                  >
 
-                      {notification.type ===
-                        "SHORTLISTED" ? (
-                        <FaCheckCircle
-                          className="text-green-600"
-                        />
-                      ) : (
-                        <FaBuilding
-                          className="text-blue-600"
-                        />
-                      )}
+                    {notification.type === "SHORTLISTED" ? (
+                      <FaCheckCircle
+                        className={
+                          notification.isRead
+                            ? "text-gray-500"
+                            : "text-green-600"
+                        }
+                      />
+                    ) : (
+                      <FaBuilding
+                        className={
+                          notification.isRead
+                            ? "text-gray-500"
+                            : "text-blue-600"
+                        }
+                      />
+                    )}
 
-                    </div>
+                  </div>
 
-                    <div className="flex-1">
+                  {/* Content */}
+                  <div className="flex-1">
+
+                    <div className="flex justify-between items-start">
 
                       <h3 className="font-semibold text-lg text-slate-800">
                         {notification.title}
                       </h3>
 
-                      <p className="text-gray-600 mt-1">
-                        {notification.message}
-                      </p>
+                      {!notification.isRead && (
+                        <span className="text-xs bg-blue-600 text-white px-3 py-1 rounded-full">
+                          New
+                        </span>
+                      )}
 
-                      <p className="text-sm text-gray-400 mt-2">
-                        {notification.type}
-                      </p>
+                    </div>
+
+                    <p className="text-gray-600 mt-1">
+                      {notification.message}
+                    </p>
+
+                    <p className="text-sm text-gray-400 mt-2">
+                      {notification.type}
+                    </p>
+
+                    {/* Actions */}
+                    <div className="flex gap-3 mt-4">
+
+                      {!notification.isRead && (
+                        <button
+                          onClick={() =>
+                            handleMarkAsRead(notification.id)
+                          }
+                          className="px-4 py-2 bg-blue-600 hover:bg-blue-700 text-white rounded-lg transition"
+                        >
+                          Mark as Read
+                        </button>
+                      )}
+
+                      <button
+                        onClick={() =>
+                          handleDelete(notification.id)
+                        }
+                        className="px-4 py-2 bg-red-500 hover:bg-red-600 text-white rounded-lg transition"
+                      >
+                        Delete
+                      </button>
 
                     </div>
 
@@ -164,9 +249,9 @@ function Notifications() {
 
                 </div>
 
-              )
-            )}
+              </div>
 
+            ))}
           </div>
 
         )}

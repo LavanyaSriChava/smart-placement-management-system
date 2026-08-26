@@ -42,16 +42,20 @@ function Companies() {
       const token =
         localStorage.getItem("token");
 
+      if (!token) {
+        setAppliedCompanyIds([]);
+        return;
+      }
+
       const user =
         jwtDecode(token);
 
       const response =
         await getApplicationsByStudentId(user.id);
 
-      const ids =
-        response.data.map(
-          application => application.companyId
-        );
+      const ids = response.data.map(
+        (application) => Number(application.companyId)
+      );
 
       setAppliedCompanyIds(ids);
 
@@ -129,11 +133,17 @@ function Companies() {
             <CompanyCard
               key={company.id}
               company={company}
-              alreadyApplied={
-                appliedCompanyIds.includes(company.id)
-              }
-            />
+              alreadyApplied={appliedCompanyIds.includes(Number(company.id))}
+              onApplied={(companyId) => {
+                setAppliedCompanyIds((prev) => {
+                  const id = Number(companyId);
 
+                  return prev.includes(id)
+                    ? prev
+                    : [...prev, id];
+                });
+              }}
+            />
           ))}
 
         </div>
