@@ -49,13 +49,8 @@ async def analyze(payload: AnalyzeRequest):
         job_description
     )
     suggestions = get_suggestions(resume_text,job_description)
-    if score >= 60 :
-        assessment = "Interview Worthy!!"
-    else:
-        assessment = "Under Development"
 
     return {
         "Matching Score": score,
-        "Assessment": assessment,
         "Suggestions": suggestions
     }
