@@ -1,12 +1,11 @@
 from sentence_transformers import SentenceTransformer, util
+
 model = SentenceTransformer(
-    "BAAI/bge-base-en-v1.5"
+    "sentence-transformers/all-MiniLM-L6-v2",
+    device="cpu"
 )
 
-def calculate_matching_score(
-    resume_text,
-    jd_text
-):
+def calculate_matching_score(resume_text, jd_text):
 
     resume_embedding = model.encode(
         resume_text,
@@ -24,3 +23,4 @@ def calculate_matching_score(
     )[0][0].item()
 
     return round(similarity * 100, 2)
+

@@ -1,3 +1,4 @@
+
 fastapi
 uvicorn
 python-multipart
@@ -5,5 +6,10 @@ pdfplumber
 python-docx
 sentence-transformers
 transformers
-groq (Gen-AI)
+groq
 pydantic
+python-dotenv
+nltk
+keybert
+scikit-learn
+numpy
