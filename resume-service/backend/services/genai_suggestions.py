@@ -6,11 +6,9 @@ load_dotenv()
 
 api_key = os.getenv("GROQ_API_KEY")
 
-if api_key:
-    client = Groq(api_key=api_key)
-else:
-    client = None
-    print("⚠️ WARNING: GROQ_API_KEY not set. Suggestions will be disabled.")
+client = Groq(api_key=api_key) if api_key else None
+
+MODEL_NAME = os.getenv("GROQ_MODEL", "openai/gpt-oss-20b")
 
 def get_suggestions(res, jd):
 
@@ -82,15 +80,18 @@ Start this section with:
 
     """
 
-    response = client.chat.completions.create(
-        model="llama-3.3-70b-versatile",
-        messages=[
-            {
-                "role": "user",
-                "content": prompt
-            }
-        ],
-        temperature=0
-    )
+   if client is None:
+    return "AI suggestions unavailable: GROQ_API_KEY not configured."
+
+response = client.chat.completions.create(
+    model=MODEL_NAME,
+    messages=[
+        {
+            "role": "user",
+            "content": prompt
+        }
+    ],
+    temperature=0
+)
     content = response.choices[0].message.content
     return content
