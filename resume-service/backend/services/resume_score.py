@@ -1,8 +1,7 @@
 from sentence_transformers import SentenceTransformer, util
 
 model = SentenceTransformer(
-    "sentence-transformers/all-MiniLM-L6-v2",
-    device="cpu"
+    "BAAI/bge-base-en-v1.5"
 )
 
 def calculate_matching_score(resume_text, jd_text):
